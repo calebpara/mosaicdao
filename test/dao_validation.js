@@ -1,6 +1,6 @@
-const MuralDAO = artifacts.require("MuralDAO");
+const MosaicDAO = artifacts.require("MosaicDAO");
 
-contract("MuralDAO", (accounts) => {
+contract("MosaicDAO", (accounts) => {
   it("allows voting", () => {});
   it("allows voting", () => {});
 });

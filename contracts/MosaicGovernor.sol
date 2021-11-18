@@ -7,9 +7,9 @@ import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 
-contract MuralGovernor is Governor, GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
+contract MosaicGovernor is Governor, GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
     constructor(ERC20Votes _token)
-        Governor("MuralGovernorAlpha")
+        Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(10)
     {}
