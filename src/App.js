@@ -4,12 +4,13 @@ import { Route, Redirect, Routes } from "react-router-dom";
 import { Home } from "./views";
 import getWeb3 from "./getWeb3";
 import Topbar from "./components/Navigation/Topbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserContext from "./context/UserContext";
 
 import MosaicERC20 from "./contracts/MosaicERC20.json";
 import MosaicDAO from "./contracts/MosaicDAO.json";
 import MosaicGovernor from "./contracts/MosaicGovernor.json";
+import TokenAirDrop from "./contracts/TokenAirDrop.json";
 
 function App() {
   const [web3, setWeb3] = useState(null);
@@ -18,7 +19,14 @@ function App() {
     MosaicDAO: null,
     MosaicERC20: null,
     MosaicGovernor: null,
+    TokenAirDrop: null,
   });
+
+  useEffect(() => {
+    (async () => {
+      if (window.ethereum.isConnected) onConnect();
+    })();
+  }, []);
 
   const onConnect = async () => {
     try {
@@ -45,6 +53,12 @@ function App() {
           MosaicGovernor.abi,
           MosaicGovernor.networks[networkId] &&
             MosaicGovernor.networks[networkId].address,
+          { from: account, gasLimit: 60000 }
+        ),
+        TokenAirDrop: new web3.eth.Contract(
+          TokenAirDrop.abi,
+          TokenAirDrop.networks[networkId] &&
+            TokenAirDrop.networks[networkId].address,
           { from: account, gasLimit: 60000 }
         ),
       });

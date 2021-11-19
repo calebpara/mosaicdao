@@ -568,45 +568,45 @@
     "absolutePath": "@openzeppelin/contracts/governance/extensions/GovernorProposalThreshold.sol",
     "exportedSymbols": {
       "Address": [
-        3588
+        3601
       ],
       "Context": [
-        3610
+        3623
       ],
       "ECDSA": [
-        4265
+        4278
       ],
       "EIP712": [
-        4403
+        4416
       ],
       "ERC165": [
-        4427
+        4440
       ],
       "Governor": [
-        1134
+        1147
       ],
       "GovernorProposalThreshold": [
-        1649
+        1662
       ],
       "IERC165": [
-        4439
+        4452
       ],
       "IGovernor": [
-        1370
+        1383
       ],
       "SafeCast": [
-        4920
+        4933
       ],
       "Timers": [
-        3898
+        3911
       ]
     },
-    "id": 1650,
+    "id": 1663,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1596,
+        "id": 1609,
         "literals": [
           "solidity",
           "^",
@@ -619,11 +619,11 @@
       {
         "absolutePath": "@openzeppelin/contracts/governance/Governor.sol",
         "file": "../Governor.sol",
-        "id": 1597,
+        "id": 1610,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 1650,
-        "sourceUnit": 1135,
+        "scope": 1663,
+        "sourceUnit": 1148,
         "src": "58:25:9",
         "symbolAliases": [],
         "unitAlias": ""
@@ -633,42 +633,42 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 1599,
+              "id": 1612,
               "name": "Governor",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1134,
+              "referencedDeclaration": 1147,
               "src": "268:8:9"
             },
-            "id": 1600,
+            "id": 1613,
             "nodeType": "InheritanceSpecifier",
             "src": "268:8:9"
           }
         ],
         "contractDependencies": [
-          1134,
-          1370,
-          3610,
-          4403,
-          4427,
-          4439
+          1147,
+          1383,
+          3623,
+          4416,
+          4440,
+          4452
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 1598,
+          "id": 1611,
           "nodeType": "StructuredDocumentation",
           "src": "85:135:9",
           "text": " @dev Extension of {Governor} for proposal restriction to token holders with a minimum balance.\n _Available since v4.3._"
         },
         "fullyImplemented": false,
-        "id": 1649,
+        "id": 1662,
         "linearizedBaseContracts": [
-          1649,
-          1134,
-          1370,
-          4403,
-          4427,
-          4439,
-          3610
+          1662,
+          1147,
+          1383,
+          4416,
+          4440,
+          4452,
+          3623
         ],
         "name": "GovernorProposalThreshold",
         "nameLocation": "239:25:9",
@@ -676,10 +676,10 @@
         "nodes": [
           {
             "baseFunctions": [
-              774
+              787
             ],
             "body": {
-              "id": 1641,
+              "id": 1654,
               "nodeType": "Block",
               "src": "537:264:9",
               "statements": [
@@ -691,7 +691,7 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 1629,
+                        "id": 1642,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -700,7 +700,7 @@
                           "arguments": [
                             {
                               "expression": {
-                                "id": 1620,
+                                "id": 1633,
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
@@ -711,7 +711,7 @@
                                   "typeString": "msg"
                                 }
                               },
-                              "id": 1621,
+                              "id": 1634,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
@@ -729,14 +729,14 @@
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
                               },
-                              "id": 1625,
+                              "id": 1638,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
                               "lValueRequested": false,
                               "leftExpression": {
                                 "expression": {
-                                  "id": 1622,
+                                  "id": 1635,
                                   "name": "block",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
@@ -747,7 +747,7 @@
                                     "typeString": "block"
                                   }
                                 },
-                                "id": 1623,
+                                "id": 1636,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": false,
@@ -764,7 +764,7 @@
                               "operator": "-",
                               "rightExpression": {
                                 "hexValue": "31",
-                                "id": 1624,
+                                "id": 1637,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -796,18 +796,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 1619,
+                            "id": 1632,
                             "name": "getVotes",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1287,
+                            "referencedDeclaration": 1300,
                             "src": "568:8:9",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$_t_address_$_t_uint256_$returns$_t_uint256_$",
                               "typeString": "function (address,uint256) view returns (uint256)"
                             }
                           },
-                          "id": 1626,
+                          "id": 1639,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -828,18 +828,18 @@
                           "arguments": [],
                           "expression": {
                             "argumentTypes": [],
-                            "id": 1627,
+                            "id": 1640,
                             "name": "proposalThreshold",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1648,
+                            "referencedDeclaration": 1661,
                             "src": "610:17:9",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
                               "typeString": "function () view returns (uint256)"
                             }
                           },
-                          "id": 1628,
+                          "id": 1641,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -862,7 +862,7 @@
                       },
                       {
                         "hexValue": "476f7665726e6f72436f6d7061746962696c697479427261766f3a2070726f706f73657220766f7465732062656c6f772070726f706f73616c207468726573686f6c64",
-                        "id": 1630,
+                        "id": 1643,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -888,7 +888,7 @@
                           "typeString": "literal_string \"GovernorCompatibilityBravo: proposer votes below proposal threshold\""
                         }
                       ],
-                      "id": 1618,
+                      "id": 1631,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -902,7 +902,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 1631,
+                    "id": 1644,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -917,7 +917,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1632,
+                  "id": 1645,
                   "nodeType": "ExpressionStatement",
                   "src": "547:175:9"
                 },
@@ -925,11 +925,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 1635,
+                        "id": 1648,
                         "name": "targets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1604,
+                        "referencedDeclaration": 1617,
                         "src": "754:7:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_memory_ptr",
@@ -937,11 +937,11 @@
                         }
                       },
                       {
-                        "id": 1636,
+                        "id": 1649,
                         "name": "values",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1607,
+                        "referencedDeclaration": 1620,
                         "src": "763:6:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
@@ -949,11 +949,11 @@
                         }
                       },
                       {
-                        "id": 1637,
+                        "id": 1650,
                         "name": "calldatas",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1610,
+                        "referencedDeclaration": 1623,
                         "src": "771:9:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_bytes_memory_ptr_$dyn_memory_ptr",
@@ -961,11 +961,11 @@
                         }
                       },
                       {
-                        "id": 1638,
+                        "id": 1651,
                         "name": "description",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1612,
+                        "referencedDeclaration": 1625,
                         "src": "782:11:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -993,32 +993,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 1633,
+                        "id": 1646,
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967271,
                         "src": "740:5:9",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_super$_GovernorProposalThreshold_$1649_$",
+                          "typeIdentifier": "t_type$_t_super$_GovernorProposalThreshold_$1662_$",
                           "typeString": "type(contract super GovernorProposalThreshold)"
                         }
                       },
-                      "id": 1634,
+                      "id": 1647,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "propose",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 774,
+                      "referencedDeclaration": 787,
                       "src": "740:13:9",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_uint256_$dyn_memory_ptr_$_t_array$_t_bytes_memory_ptr_$dyn_memory_ptr_$_t_string_memory_ptr_$returns$_t_uint256_$",
                         "typeString": "function (address[] memory,uint256[] memory,bytes memory[] memory,string memory) returns (uint256)"
                       }
                     },
-                    "id": 1639,
+                    "id": 1652,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1033,21 +1033,21 @@
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 1617,
-                  "id": 1640,
+                  "functionReturnParameters": 1630,
+                  "id": 1653,
                   "nodeType": "Return",
                   "src": "733:61:9"
                 }
               ]
             },
             "documentation": {
-              "id": 1601,
+              "id": 1614,
               "nodeType": "StructuredDocumentation",
               "src": "283:48:9",
               "text": " @dev See {IGovernor-propose}."
             },
             "functionSelector": "7d5e81e2",
-            "id": 1642,
+            "id": 1655,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1055,23 +1055,23 @@
             "nameLocation": "345:7:9",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 1614,
+              "id": 1627,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "510:8:9"
             },
             "parameters": {
-              "id": 1613,
+              "id": 1626,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1604,
+                  "id": 1617,
                   "mutability": "mutable",
                   "name": "targets",
                   "nameLocation": "379:7:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "362:24:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1081,7 +1081,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1602,
+                      "id": 1615,
                       "name": "address",
                       "nodeType": "ElementaryTypeName",
                       "src": "362:7:9",
@@ -1091,7 +1091,7 @@
                         "typeString": "address"
                       }
                     },
-                    "id": 1603,
+                    "id": 1616,
                     "nodeType": "ArrayTypeName",
                     "src": "362:9:9",
                     "typeDescriptions": {
@@ -1103,12 +1103,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1607,
+                  "id": 1620,
                   "mutability": "mutable",
                   "name": "values",
                   "nameLocation": "413:6:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "396:23:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1118,7 +1118,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1605,
+                      "id": 1618,
                       "name": "uint256",
                       "nodeType": "ElementaryTypeName",
                       "src": "396:7:9",
@@ -1127,7 +1127,7 @@
                         "typeString": "uint256"
                       }
                     },
-                    "id": 1606,
+                    "id": 1619,
                     "nodeType": "ArrayTypeName",
                     "src": "396:9:9",
                     "typeDescriptions": {
@@ -1139,12 +1139,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1610,
+                  "id": 1623,
                   "mutability": "mutable",
                   "name": "calldatas",
                   "nameLocation": "444:9:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "429:24:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1154,7 +1154,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1608,
+                      "id": 1621,
                       "name": "bytes",
                       "nodeType": "ElementaryTypeName",
                       "src": "429:5:9",
@@ -1163,7 +1163,7 @@
                         "typeString": "bytes"
                       }
                     },
-                    "id": 1609,
+                    "id": 1622,
                     "nodeType": "ArrayTypeName",
                     "src": "429:7:9",
                     "typeDescriptions": {
@@ -1175,12 +1175,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1612,
+                  "id": 1625,
                   "mutability": "mutable",
                   "name": "description",
                   "nameLocation": "477:11:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "463:25:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1189,7 +1189,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1611,
+                    "id": 1624,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "463:6:9",
@@ -1204,17 +1204,17 @@
               "src": "352:142:9"
             },
             "returnParameters": {
-              "id": 1617,
+              "id": 1630,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1616,
+                  "id": 1629,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "528:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1223,7 +1223,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1615,
+                    "id": 1628,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "528:7:9",
@@ -1237,7 +1237,7 @@
               ],
               "src": "527:9:9"
             },
-            "scope": 1649,
+            "scope": 1662,
             "src": "336:465:9",
             "stateMutability": "nonpayable",
             "virtual": true,
@@ -1245,13 +1245,13 @@
           },
           {
             "documentation": {
-              "id": 1643,
+              "id": 1656,
               "nodeType": "StructuredDocumentation",
               "src": "807:139:9",
               "text": " @dev Part of the Governor Bravo's interface: _\"The number of votes required in order for a voter to become a proposer\"_."
             },
             "functionSelector": "b58131b0",
-            "id": 1648,
+            "id": 1661,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -1259,23 +1259,23 @@
             "nameLocation": "960:17:9",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1644,
+              "id": 1657,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "977:2:9"
             },
             "returnParameters": {
-              "id": 1647,
+              "id": 1660,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1646,
+                  "id": 1659,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1648,
+                  "scope": 1661,
                   "src": "1009:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1284,7 +1284,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1645,
+                    "id": 1658,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1009:7:9",
@@ -1298,14 +1298,14 @@
               ],
               "src": "1008:9:9"
             },
-            "scope": 1649,
+            "scope": 1662,
             "src": "951:67:9",
             "stateMutability": "view",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 1650,
+        "scope": 1663,
         "src": "221:799:9"
       }
     ],
@@ -1315,45 +1315,45 @@
     "absolutePath": "@openzeppelin/contracts/governance/extensions/GovernorProposalThreshold.sol",
     "exportedSymbols": {
       "Address": [
-        3588
+        3601
       ],
       "Context": [
-        3610
+        3623
       ],
       "ECDSA": [
-        4265
+        4278
       ],
       "EIP712": [
-        4403
+        4416
       ],
       "ERC165": [
-        4427
+        4440
       ],
       "Governor": [
-        1134
+        1147
       ],
       "GovernorProposalThreshold": [
-        1649
+        1662
       ],
       "IERC165": [
-        4439
+        4452
       ],
       "IGovernor": [
-        1370
+        1383
       ],
       "SafeCast": [
-        4920
+        4933
       ],
       "Timers": [
-        3898
+        3911
       ]
     },
-    "id": 1650,
+    "id": 1663,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1596,
+        "id": 1609,
         "literals": [
           "solidity",
           "^",
@@ -1366,11 +1366,11 @@
       {
         "absolutePath": "@openzeppelin/contracts/governance/Governor.sol",
         "file": "../Governor.sol",
-        "id": 1597,
+        "id": 1610,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 1650,
-        "sourceUnit": 1135,
+        "scope": 1663,
+        "sourceUnit": 1148,
         "src": "58:25:9",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1380,42 +1380,42 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 1599,
+              "id": 1612,
               "name": "Governor",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 1134,
+              "referencedDeclaration": 1147,
               "src": "268:8:9"
             },
-            "id": 1600,
+            "id": 1613,
             "nodeType": "InheritanceSpecifier",
             "src": "268:8:9"
           }
         ],
         "contractDependencies": [
-          1134,
-          1370,
-          3610,
-          4403,
-          4427,
-          4439
+          1147,
+          1383,
+          3623,
+          4416,
+          4440,
+          4452
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 1598,
+          "id": 1611,
           "nodeType": "StructuredDocumentation",
           "src": "85:135:9",
           "text": " @dev Extension of {Governor} for proposal restriction to token holders with a minimum balance.\n _Available since v4.3._"
         },
         "fullyImplemented": false,
-        "id": 1649,
+        "id": 1662,
         "linearizedBaseContracts": [
-          1649,
-          1134,
-          1370,
-          4403,
-          4427,
-          4439,
-          3610
+          1662,
+          1147,
+          1383,
+          4416,
+          4440,
+          4452,
+          3623
         ],
         "name": "GovernorProposalThreshold",
         "nameLocation": "239:25:9",
@@ -1423,10 +1423,10 @@
         "nodes": [
           {
             "baseFunctions": [
-              774
+              787
             ],
             "body": {
-              "id": 1641,
+              "id": 1654,
               "nodeType": "Block",
               "src": "537:264:9",
               "statements": [
@@ -1438,7 +1438,7 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 1629,
+                        "id": 1642,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1447,7 +1447,7 @@
                           "arguments": [
                             {
                               "expression": {
-                                "id": 1620,
+                                "id": 1633,
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
@@ -1458,7 +1458,7 @@
                                   "typeString": "msg"
                                 }
                               },
-                              "id": 1621,
+                              "id": 1634,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
@@ -1476,14 +1476,14 @@
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
                               },
-                              "id": 1625,
+                              "id": 1638,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
                               "lValueRequested": false,
                               "leftExpression": {
                                 "expression": {
-                                  "id": 1622,
+                                  "id": 1635,
                                   "name": "block",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
@@ -1494,7 +1494,7 @@
                                     "typeString": "block"
                                   }
                                 },
-                                "id": 1623,
+                                "id": 1636,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": false,
@@ -1511,7 +1511,7 @@
                               "operator": "-",
                               "rightExpression": {
                                 "hexValue": "31",
-                                "id": 1624,
+                                "id": 1637,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -1543,18 +1543,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 1619,
+                            "id": 1632,
                             "name": "getVotes",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1287,
+                            "referencedDeclaration": 1300,
                             "src": "568:8:9",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$_t_address_$_t_uint256_$returns$_t_uint256_$",
                               "typeString": "function (address,uint256) view returns (uint256)"
                             }
                           },
-                          "id": 1626,
+                          "id": 1639,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1575,18 +1575,18 @@
                           "arguments": [],
                           "expression": {
                             "argumentTypes": [],
-                            "id": 1627,
+                            "id": 1640,
                             "name": "proposalThreshold",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1648,
+                            "referencedDeclaration": 1661,
                             "src": "610:17:9",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
                               "typeString": "function () view returns (uint256)"
                             }
                           },
-                          "id": 1628,
+                          "id": 1641,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1609,7 +1609,7 @@
                       },
                       {
                         "hexValue": "476f7665726e6f72436f6d7061746962696c697479427261766f3a2070726f706f73657220766f7465732062656c6f772070726f706f73616c207468726573686f6c64",
-                        "id": 1630,
+                        "id": 1643,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1635,7 +1635,7 @@
                           "typeString": "literal_string \"GovernorCompatibilityBravo: proposer votes below proposal threshold\""
                         }
                       ],
-                      "id": 1618,
+                      "id": 1631,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1649,7 +1649,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 1631,
+                    "id": 1644,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1664,7 +1664,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1632,
+                  "id": 1645,
                   "nodeType": "ExpressionStatement",
                   "src": "547:175:9"
                 },
@@ -1672,11 +1672,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 1635,
+                        "id": 1648,
                         "name": "targets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1604,
+                        "referencedDeclaration": 1617,
                         "src": "754:7:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_memory_ptr",
@@ -1684,11 +1684,11 @@
                         }
                       },
                       {
-                        "id": 1636,
+                        "id": 1649,
                         "name": "values",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1607,
+                        "referencedDeclaration": 1620,
                         "src": "763:6:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
@@ -1696,11 +1696,11 @@
                         }
                       },
                       {
-                        "id": 1637,
+                        "id": 1650,
                         "name": "calldatas",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1610,
+                        "referencedDeclaration": 1623,
                         "src": "771:9:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_bytes_memory_ptr_$dyn_memory_ptr",
@@ -1708,11 +1708,11 @@
                         }
                       },
                       {
-                        "id": 1638,
+                        "id": 1651,
                         "name": "description",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1612,
+                        "referencedDeclaration": 1625,
                         "src": "782:11:9",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -1740,32 +1740,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 1633,
+                        "id": 1646,
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967271,
                         "src": "740:5:9",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_super$_GovernorProposalThreshold_$1649_$",
+                          "typeIdentifier": "t_type$_t_super$_GovernorProposalThreshold_$1662_$",
                           "typeString": "type(contract super GovernorProposalThreshold)"
                         }
                       },
-                      "id": 1634,
+                      "id": 1647,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "propose",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 774,
+                      "referencedDeclaration": 787,
                       "src": "740:13:9",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_uint256_$dyn_memory_ptr_$_t_array$_t_bytes_memory_ptr_$dyn_memory_ptr_$_t_string_memory_ptr_$returns$_t_uint256_$",
                         "typeString": "function (address[] memory,uint256[] memory,bytes memory[] memory,string memory) returns (uint256)"
                       }
                     },
-                    "id": 1639,
+                    "id": 1652,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1780,21 +1780,21 @@
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 1617,
-                  "id": 1640,
+                  "functionReturnParameters": 1630,
+                  "id": 1653,
                   "nodeType": "Return",
                   "src": "733:61:9"
                 }
               ]
             },
             "documentation": {
-              "id": 1601,
+              "id": 1614,
               "nodeType": "StructuredDocumentation",
               "src": "283:48:9",
               "text": " @dev See {IGovernor-propose}."
             },
             "functionSelector": "7d5e81e2",
-            "id": 1642,
+            "id": 1655,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1802,23 +1802,23 @@
             "nameLocation": "345:7:9",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 1614,
+              "id": 1627,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "510:8:9"
             },
             "parameters": {
-              "id": 1613,
+              "id": 1626,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1604,
+                  "id": 1617,
                   "mutability": "mutable",
                   "name": "targets",
                   "nameLocation": "379:7:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "362:24:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1828,7 +1828,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1602,
+                      "id": 1615,
                       "name": "address",
                       "nodeType": "ElementaryTypeName",
                       "src": "362:7:9",
@@ -1838,7 +1838,7 @@
                         "typeString": "address"
                       }
                     },
-                    "id": 1603,
+                    "id": 1616,
                     "nodeType": "ArrayTypeName",
                     "src": "362:9:9",
                     "typeDescriptions": {
@@ -1850,12 +1850,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1607,
+                  "id": 1620,
                   "mutability": "mutable",
                   "name": "values",
                   "nameLocation": "413:6:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "396:23:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1865,7 +1865,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1605,
+                      "id": 1618,
                       "name": "uint256",
                       "nodeType": "ElementaryTypeName",
                       "src": "396:7:9",
@@ -1874,7 +1874,7 @@
                         "typeString": "uint256"
                       }
                     },
-                    "id": 1606,
+                    "id": 1619,
                     "nodeType": "ArrayTypeName",
                     "src": "396:9:9",
                     "typeDescriptions": {
@@ -1886,12 +1886,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1610,
+                  "id": 1623,
                   "mutability": "mutable",
                   "name": "calldatas",
                   "nameLocation": "444:9:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "429:24:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1901,7 +1901,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1608,
+                      "id": 1621,
                       "name": "bytes",
                       "nodeType": "ElementaryTypeName",
                       "src": "429:5:9",
@@ -1910,7 +1910,7 @@
                         "typeString": "bytes"
                       }
                     },
-                    "id": 1609,
+                    "id": 1622,
                     "nodeType": "ArrayTypeName",
                     "src": "429:7:9",
                     "typeDescriptions": {
@@ -1922,12 +1922,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 1612,
+                  "id": 1625,
                   "mutability": "mutable",
                   "name": "description",
                   "nameLocation": "477:11:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "463:25:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1936,7 +1936,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1611,
+                    "id": 1624,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "463:6:9",
@@ -1951,17 +1951,17 @@
               "src": "352:142:9"
             },
             "returnParameters": {
-              "id": 1617,
+              "id": 1630,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1616,
+                  "id": 1629,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1642,
+                  "scope": 1655,
                   "src": "528:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1970,7 +1970,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1615,
+                    "id": 1628,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "528:7:9",
@@ -1984,7 +1984,7 @@
               ],
               "src": "527:9:9"
             },
-            "scope": 1649,
+            "scope": 1662,
             "src": "336:465:9",
             "stateMutability": "nonpayable",
             "virtual": true,
@@ -1992,13 +1992,13 @@
           },
           {
             "documentation": {
-              "id": 1643,
+              "id": 1656,
               "nodeType": "StructuredDocumentation",
               "src": "807:139:9",
               "text": " @dev Part of the Governor Bravo's interface: _\"The number of votes required in order for a voter to become a proposer\"_."
             },
             "functionSelector": "b58131b0",
-            "id": 1648,
+            "id": 1661,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -2006,23 +2006,23 @@
             "nameLocation": "960:17:9",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1644,
+              "id": 1657,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "977:2:9"
             },
             "returnParameters": {
-              "id": 1647,
+              "id": 1660,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1646,
+                  "id": 1659,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1648,
+                  "scope": 1661,
                   "src": "1009:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2031,7 +2031,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1645,
+                    "id": 1658,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1009:7:9",
@@ -2045,14 +2045,14 @@
               ],
               "src": "1008:9:9"
             },
-            "scope": 1649,
+            "scope": 1662,
             "src": "951:67:9",
             "stateMutability": "view",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 1650,
+        "scope": 1663,
         "src": "221:799:9"
       }
     ],
@@ -2064,7 +2064,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-11-18T21:52:13.493Z",
+  "updatedAt": "2021-11-18T22:56:49.624Z",
   "devdoc": {
     "details": "Extension of {Governor} for proposal restriction to token holders with a minimum balance. _Available since v4.3._",
     "kind": "dev",

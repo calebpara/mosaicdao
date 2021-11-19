@@ -15,8 +15,9 @@ contract TokenAirDrop is Ownable {
     }
 
     function claim() external {
-        require(!_claimed[tx.origin], "You already claimed the tokens once!");
-        token.transferFrom(owner(), msg.sender, airdropAmount);
+        // require(!_claimed[tx.origin], "You already claimed the tokens once!");
+        // _claimed[tx.origin] = true;
+        // token.transferFrom(owner(), msg.sender, airdropAmount);
     }
 
     function remainingTokens() external view returns (uint256) {
