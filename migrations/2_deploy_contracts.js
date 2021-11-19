@@ -4,7 +4,7 @@ const MosaicERC20 = artifacts.require("MosaicERC20");
 const MosaicGovernor = artifacts.require("MosaicGovernor");
 const TokenAirDrop = artifacts.require("TokenAirDrop");
 
-module.exports = async (deployer) => {
+module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(MosaicERC20);
   const erc20 = await MosaicERC20.deployed();
 

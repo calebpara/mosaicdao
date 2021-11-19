@@ -41,25 +41,25 @@ function App() {
           MosaicDAO.abi,
           MosaicDAO.networks[networkId] &&
             MosaicDAO.networks[networkId].address,
-          { from: account, gasLimit: 60000 }
+          { from: account, gasLimit: 1000000 }
         ),
         MosaicERC20: new web3.eth.Contract(
           MosaicERC20.abi,
           MosaicERC20.networks[networkId] &&
             MosaicERC20.networks[networkId].address,
-          { from: account, gasLimit: 60000 }
+          { from: account, gasLimit: 1000000 }
         ),
         MosaicGovernor: new web3.eth.Contract(
           MosaicGovernor.abi,
           MosaicGovernor.networks[networkId] &&
             MosaicGovernor.networks[networkId].address,
-          { from: account, gasLimit: 60000 }
+          { from: account, gasLimit: 1000000 }
         ),
         TokenAirDrop: new web3.eth.Contract(
           TokenAirDrop.abi,
           TokenAirDrop.networks[networkId] &&
             TokenAirDrop.networks[networkId].address,
-          { from: account, gasLimit: 60000 }
+          { from: account, gasLimit: 1000000 }
         ),
       });
     } catch {

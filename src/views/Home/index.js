@@ -9,12 +9,13 @@ function Home() {
   // Run once when page loaded
   useEffect(() => {
     refreshPage();
-  }, []);
+  }, [contracts]);
 
   const refreshPage = async () => {
     if (contracts["MosaicERC20"])
       setUserERC20Balance(
-        await contracts["MosaicERC20"].methods.balanceOf(account).call()
+        (await contracts["MosaicERC20"].methods.balanceOf(account).call()) /
+          Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
       );
   };
 
