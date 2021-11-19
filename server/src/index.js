@@ -77,9 +77,9 @@ app.post("/", async (req, res) => {
 
     console.log(updateMessage);
 
-    sender = await web3.eth.accounts.recover(updateMessage, body.verification);
+    const sender = await web3.eth.accounts.recover(updateMessage, body.verification);
     console.log(sender);
-    if (sender != currentOwner) {
+    if (sender !== currentOwner) {
       res
         .status(400)
         .send(
@@ -94,9 +94,9 @@ app.post("/", async (req, res) => {
 
     const metadata = await probe(body.image_url);
     if (
-      metadata.height != 256 ||
-      metadata.width != 256 ||
-      metadata.type != "png"
+      metadata.height !== 256 ||
+      metadata.width !== 256 ||
+      metadata.type !== "png"
     ) {
       res
         .status(400)
@@ -107,7 +107,7 @@ app.post("/", async (req, res) => {
     }
     let mergedImage;
     const fileName = "image.png";
-    if (imgURL == "") {
+    if (imgURL === "") {
       mergedImage = await mergeImages([{ src: body.image_url, x: 0, y: 0 }], {
         Canvas: Canvas,
         Image: Image,
@@ -148,7 +148,7 @@ app.post("/", async (req, res) => {
 });
 
 app.get("/", async function (req, res) {
-  if (imgURL == "") {
+  if (imgURL === "") {
     res.status(400).send("no picture uploaded");
   } else {
     (
