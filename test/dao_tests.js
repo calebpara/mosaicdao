@@ -17,8 +17,9 @@ contract("DAO Tests", async accounts => {
         account,
         new web3.utils.BN("10000000000000000000") // 1 MOSAIC
       )
+      console.log(await erc20.delegates(account));
     });
-    accounts.foreach(account => {tokenAirDrop.claim(
+    accounts.forEach(account => {tokenAirDrop.claim(
       { from: account }
     )});
     const transferCalldata = web3.eth.abi.encodeFunctionCall({
