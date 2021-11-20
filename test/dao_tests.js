@@ -11,37 +11,6 @@ contract("DAO Tests", async accounts => {
     mosaicDAO = await MosaicDAO.deployed();
   });
 
-  it("Append image", async () => {
-    await mosaicDAO.appendImage(
-      "https://bafybeiau2675bek3hsschrxqn43ohuygj42sqsjzqvv3q4ksknfrqphdsa.ipfs.dweb.link/img1.jpg"
-    );
-  })
-  it("Propose remove", async () => {
-    accounts.forEach(async account => {
-      await erc20.approve(
-        account,
-        new web3.utils.BN("10000000000000000000") // 1 MOSAIC
-      )
-    });
-    await mosaicDAO.appendImage(
-      "https://bafybeiau2675bek3hsschrxqn43ohuygj42sqsjzqvv3q4ksknfrqphdsa.ipfs.dweb.link/img1.jpg"
-    );
-    const transferCalldata = web3.eth.abi.encodeFunctionCall({
-      name: 'removeImage',
-      type: 'function',
-      inputs: [{
-          type: 'uint',
-          name: 'index'
-      }]
-    }, [0]);
-    console.log(transferCalldata);
-    await governor.propose(
-      [MosaicDAO.address],
-      [0],
-      [transferCalldata],
-      "Add the bathroom stall art to the gallery"
-    );
-  });
   it("Propose append", async () => {
     accounts.forEach(async account => {
       await erc20.approve(

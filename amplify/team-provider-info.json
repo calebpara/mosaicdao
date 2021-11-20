@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mosaicdao-dev-130550-authRole",
+      "UnauthRoleArn": "arn:aws:iam::065256563341:role/amplify-mosaicdao-dev-130550-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::065256563341:role/amplify-mosaicdao-dev-130550-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-mosaicdao-dev-130550-deployment",
+      "UnauthRoleName": "amplify-mosaicdao-dev-130550-unauthRole",
+      "StackName": "amplify-mosaicdao-dev-130550",
+      "StackId": "arn:aws:cloudformation:us-east-2:065256563341:stack/amplify-mosaicdao-dev-130550/e112e730-4a34-11ec-8561-0a9b168330e4",
+      "AmplifyAppId": "d1t8lpiiyaolge"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1t8lpiiyaolge",
+          "type": "manual"
+        }
+      },
+      "function": {
+        "daorpc": {
+          "deploymentBucketName": "amplify-mosaicdao-dev-130550-deployment",
+          "s3Key": "amplify-builds/daorpc-446b786953636869746c-build.zip"
+        },
+        "imgrpc": {
+          "deploymentBucketName": "amplify-mosaicdao-dev-130550-deployment",
+          "s3Key": "amplify-builds/imgrpc-6e76645079554e796942-build.zip"
+        }
+      }
+    }
+  }
+}

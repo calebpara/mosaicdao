@@ -1,0 +1,33 @@
+{
+  "name": "daorpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-serverless-express": "^3.3.5",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "atob": "^2.1.2",
+    "axios": "^0.21.1",
+    "canvas": "^2.8.0",
+    "crypto-browserify": "^3.12.0",
+    "file-class": "^0.1.3",
+    "https-browserify": "^1.0.0",
+    "js-ipfs": "0.0.301",
+    "jsdom": "^17.0.0",
+    "merge-images": "^2.0.0",
+    "node-fetch": "^2.6.1",
+    "os-browserify": "^0.3.0",
+    "probe-image-size": "^7.2.1",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0",
+    "web3": "^1.5.2",
+    "web3.storage": "^3.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
