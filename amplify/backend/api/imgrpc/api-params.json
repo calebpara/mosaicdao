@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/imgrpc",
+      "lambdaFunction": "imgrpc",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/imgrpc"
+    }
+  ],
+  "resourceName": "imgrpc",
+  "apiName": "imgrpc",
+  "functionArns": [
+    {
+      "lambdaFunction": "imgrpc"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-mosaicdao-dev-130550-authRole",
+    "unAuthRoleName": "amplify-mosaicdao-dev-130550-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "imgrpc",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
