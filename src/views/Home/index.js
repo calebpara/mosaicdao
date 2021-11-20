@@ -1,5 +1,6 @@
-import { Button } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { useContext, useEffect, useState } from "react";
+import ActionPanel from "../../components/ActionPanel";
 import UserContext from "../../context/UserContext";
 import Mosaic from '../../components/Mosaic';
 import {Container} from 'react-bootstrap'
@@ -57,6 +58,7 @@ function Home() {
           </Col>
         </Row>
     </Container>
+
   );
 }
 

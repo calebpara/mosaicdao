@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/rpc",
+      "lambdaFunction": "daorpc",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/rpc"
+    }
+  ],
+  "resourceName": "daorpc",
+  "apiName": "daorpc",
+  "functionArns": [
+    {
+      "lambdaFunction": "daorpc"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-mosaicdao-dev-130550-authRole",
+    "unAuthRoleName": "amplify-mosaicdao-dev-130550-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "daorpc",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
