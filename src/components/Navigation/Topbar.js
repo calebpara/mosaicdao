@@ -12,6 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { AccountCircle, Loyalty } from "@material-ui/icons";
 import UserContext from "../../context/UserContext";
 import logo from '../../assets/images/moslogo.png'
+import discord from '../../assets/images/discord.png'
+import twitter from '../../assets/images/twitter.png'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,7 +83,37 @@ export default function Topbar({ onConnect }) {
           >
           </img>
           </a>
+
           <div className={classes.spacer}></div>
+
+          <a className="hvr-grow">
+          <img
+            src={twitter}
+            alt="twitter"
+            style={{
+              width: 'auto',
+              height: 32,
+              marginRight: 10,
+              marginTop: 5,
+              marginBottom: 5,
+            }}
+          />
+          </a>
+
+          <a className="hvr-grow">
+          <img
+            src={discord}
+            alt="discord"
+            style={{
+              width: 'auto',
+              height: 32,
+              marginRight: 10,
+              marginTop: 5,
+              marginBottom: 5,
+            }}
+          />
+
+          </a>
           {account ? (
             <Button color="dark" variant="contained" disabled>
               {account.substr(0, 10) + "..."}

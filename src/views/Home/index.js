@@ -4,6 +4,7 @@ import UserContext from "../../context/UserContext";
 import Mosaic from '../../components/Mosaic';
 import {Container} from 'react-bootstrap'
 import {Col, Row} from 'react-bootstrap'
+import Activity from '../../components/Activity';
 
 function Home() {
   const { contracts, account } = useContext(UserContext);
@@ -32,16 +33,28 @@ function Home() {
   };
 
   return (
-    <Container>
+    <Container fluid>
 
         {/* <p>Token Balance: {userERC20Balance}</p>
         <Button variant="outlined">Vote</Button>
         <Button variant="outlined" onClick={onRequestAirDrop}>
           Request Airdrop
         </Button> */}
-        
-        <Row style={{paddingTop: '10vh', paddingBottom: '10vh'}}>
-        <Mosaic />
+
+        <Row style={{paddingTop: '6vh', paddingBottom: '6vh'}}>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <h1>Welcome to MosaicDAO</h1>
+          <h3>We're creating the world's most collaborative NFT, owned by the DAO.</h3>
+        </div>
+        </Row>
+
+        <Row style={{paddingTop: '6vh', paddingBottom: '10vh'}}>
+          <Col sm={4} >
+          <Activity />
+          </Col>
+          <Col sm={8}>
+            <Mosaic />
+          </Col>
         </Row>
     </Container>
   );
