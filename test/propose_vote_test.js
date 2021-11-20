@@ -40,8 +40,12 @@ contract("Governance Tests", async accounts => {
       await governor.castVote(proposal.proposalId , 1)
     });
 
-    console.log(await governor.proposalEta(proposal.proposalId));
-    console.log(await governor.state(proposal.proposalId));
+    const feed = await governor.contract.events.ProposalCreated();
+    console.log(proposal)
+    console.log(feed);
+    //console.log(await governor.proposalEta(proposal.proposalId));
+    //console.log(proposal.proposalId);
+    //console.log(await governor.state.call(proposal.proposalId));
 
 
 

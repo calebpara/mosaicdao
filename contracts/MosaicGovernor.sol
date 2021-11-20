@@ -76,14 +76,14 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
 
     function _executor()
     internal view virtual override(GovernorTimelockControl, Governor) returns (address) {
-        super._executor();
+        return super._executor();
     }
 
     function state(uint256 proposalId) public view virtual override(GovernorTimelockControl, Governor) returns (ProposalState) {
-        super.state(proposalId);
+        return super.state(proposalId);
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(GovernorTimelockControl, Governor) returns (bool) {
-        super.supportsInterface(interfaceId);
+        return super.supportsInterface(interfaceId);
     }
 }
