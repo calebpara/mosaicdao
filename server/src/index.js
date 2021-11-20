@@ -20,7 +20,7 @@ const API_KEY =
 const WALLET_KEY =
   "0x0b2b5ad1a40278a7def9beec3d653115368d76809444fe31834aa7b285504962";
 
-const provider = new Web3.providers.HttpProvider("http://localhost:8545");
+const provider = new Web3.providers.HttpProvider("http://localhost:7545");
 
 const networkId = 5777;
 
@@ -73,7 +73,6 @@ app.use(express.json());
 // Anyone can trigger an update
 app.post("/", async (req, res) => {
   try {
-
   } catch (error) {
     res.status(400).send(error.toString());
   }
