@@ -22,8 +22,8 @@ module.exports = async (deployer, network, accounts) => {
     new web3.utils.BN("1000000000000000000000") // 100 MOSAIC
   );
 
-  await deployer.deploy(MosaicGovernor, erc20.address);
-  let mosaicGovernor = await MosaicGovernor.deployed();
+  // await deployer.deploy(MosaicGovernor, erc20.address);
+  // let mosaicGovernor = await MosaicGovernor.deployed();
 
   await deployer.deploy(MosaicDAO, 5);
   let mosaicDAO = await MosaicDAO.deployed();
@@ -35,5 +35,5 @@ module.exports = async (deployer, network, accounts) => {
     "https://bafybeih4ooehbzdomc26uzfswirbsobavftrurveig6hyaqe3upkpnwloe.ipfs.dweb.link/img2.jpg"
   );
 
-  await mosaicDAO.transferOwnership(mosaicGovernor.address);
+  // await mosaicDAO.transferOwnership(mosaicGovernor.address);
 };
