@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/governance/extensions/GovernorProposalThreshold.
 import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
-contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
+contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
     constructor(ERC20Votes _token)
         Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
@@ -52,5 +53,36 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
         returns (uint256)
     {
         return super.propose(targets, values, calldatas, description);
+    }
+    function _execute(
+        uint256 proposalId, /* proposalId */
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal virtual override(GovernorTimelockControl) {
+        return super._execute(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _cancel(
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal virtual override(GovernorTimelockControl) returns (unt256) {
+        return super.cancel(targets, values, calldatas, descriptionHash);
+    }
+
+    function _executor()
+    internal view virtual overrides(TimelockController) returns (address) {
+        super._executor();
+    }
+
+    function state(uint256 proposalId) public view virtual overrides(TimelockController) {
+        super.state(proposalId);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual overrides(TimelockController) {
+        super.supportsInterface(interfaceId);
     }
 }
