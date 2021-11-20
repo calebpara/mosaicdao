@@ -73,6 +73,7 @@ app.use(express.json());
 // Anyone can trigger an update
 app.post("/", async (req, res) => {
   try {
+
   } catch (error) {
     res.status(400).send(error.toString());
   }
@@ -156,7 +157,6 @@ app.get("/", async function (req, res) {
       res.status(400).send(error.toString());
     }
   }
-
   if (imgURL == "") {
     res.status(400).send("no picture uploaded");
   } else {
