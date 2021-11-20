@@ -23,8 +23,23 @@ module.exports = async (deployer, network, accounts) => {
       new web3.utils.BN("10000000000000000000") // 1 MOSAIC
     )
   });
+  const transferCalldata = web3.eth.abi.encodeFunctionCall({
+    name: 'appendImage',
+    type: 'function',
+    inputs: [{
+        type: 'string',
+        name: 'uri'
+    }]
+  }, ['https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu']);
 
+  const token = await ethers.getContractAt(‘ERC20’, tokenAddress);
 
+  await governor.propose(
+    [erc20],
+    [0],
+    [transferCalldata],
+    "Add the bathroom stall art to the gallery"
+  );
 
   await deployer.deploy(MosaicGovernor, erc20.address);
 };
