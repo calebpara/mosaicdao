@@ -1,6 +1,9 @@
 import { Button } from "@material-ui/core";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../context/UserContext";
+import Mosaic from '../../components/Mosaic';
+import {Container} from 'react-bootstrap'
+import {Col, Row} from 'react-bootstrap'
 
 function Home() {
   const { contracts, account } = useContext(UserContext);
@@ -29,15 +32,18 @@ function Home() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Token Balance: {userERC20Balance}</p>
+    <Container>
+
+        {/* <p>Token Balance: {userERC20Balance}</p>
         <Button variant="outlined">Vote</Button>
         <Button variant="outlined" onClick={onRequestAirDrop}>
           Request Airdrop
-        </Button>
-      </header>
-    </div>
+        </Button> */}
+        
+        <Row style={{paddingTop: '10vh', paddingBottom: '10vh'}}>
+        <Mosaic />
+        </Row>
+    </Container>
   );
 }
 
