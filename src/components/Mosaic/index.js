@@ -27,19 +27,30 @@ export default function Mosaic() {
 
     return (
         <div className="container">
-            {loading &&
+            {/* {loading &&
             user.map((user)=> (
                 // this is fetching sample data from randomuser.me
                 // replace with our mosaic api/ ipfs etc etc 
                 <div key={user.login.uuid}>
                     <img
+                    className="hvr-grow"
                     style={{objectFit: "contain", height: 100, width: 100, padding: 1}} 
                     variant="top" 
                     src={user.picture.medium}
                     alt="item"
                     />
                 </div>
-            ))}
+            ))} */}
+
+            <img
+            src='https://www.marylandzoo.org/wp-content/uploads/2019/10/PenguinTrivetHeader.jpg'
+            alt="mosaic"
+            style={{
+              objectFit: "contain", 
+              height: '100%', 
+              width: '100%', 
+            }}
+          />
         </div>
     )
 }
