@@ -11,6 +11,16 @@ contract("DAO Tests", async accounts => {
     mosaicDAO = await MosaicDAO.deployed();
   });
 
+  it("Airdrop 1 MOSAIC to all.", async () => {
+    // Airdrop each account 1 MOSAIC for science
+    accounts.forEach(async account => {
+      await erc20.approve(
+        account,
+        new web3.utils.BN("10000000000000000000") // 1 MOSAIC
+      )
+    });
+  });
+
   it("Propose append", async () => {
     accounts.forEach(async account => {
       await erc20.approve(
@@ -37,14 +47,5 @@ contract("DAO Tests", async accounts => {
     );
   });
 
-  it("Airdrop 1 MOSAIC to all.", async () => {
-    // Airdrop each account 1 MOSAIC for science
-    accounts.forEach(async account => {
-      await erc20.approve(
-        account,
-        new web3.utils.BN("10000000000000000000") // 1 MOSAIC
-      )
-    });
-  });
 
 });
