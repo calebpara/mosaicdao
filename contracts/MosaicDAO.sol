@@ -19,6 +19,7 @@ contract MosaicDAO is Ownable {
     gallery.push(uri);
   }
   function removeImage(uint index) external onlyOwner { 
+    require (index < gallery.length);
     delete gallery[index];
   }
 }

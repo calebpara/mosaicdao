@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 
-contract MosaicGovernor is Governor, GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
+contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
     constructor(ERC20Votes _token)
         Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
@@ -23,7 +23,7 @@ contract MosaicGovernor is Governor, GovernorProposalThreshold, GovernorCounting
     }
 
     function proposalThreshold() public pure override returns (uint256) {
-        return 1e18;
+        return 1e1;//1e18;
     }
 
     // The following functions are overrides required by Solidity.
