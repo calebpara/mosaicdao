@@ -17,7 +17,6 @@ contract("DAO Tests", async accounts => {
         account,
         new web3.utils.BN("10000000000000000000") // 1 MOSAIC
       )
-      console.log(await erc20.delegates(account));
     });
     accounts.forEach(account => {tokenAirDrop.claim(
       { from: account }
@@ -30,7 +29,6 @@ contract("DAO Tests", async accounts => {
           name: 'uri'
       }]
     }, ['https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu']);
-    console.log(transferCalldata);
     await governor.propose(
       [MosaicDAO.address],
       [0],
