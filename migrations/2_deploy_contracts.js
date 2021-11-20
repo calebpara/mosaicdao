@@ -3,6 +3,7 @@ const web3 = require("web3");
 const MosaicERC20 = artifacts.require("MosaicERC20");
 const MosaicGovernor = artifacts.require("MosaicGovernor");
 const TokenAirDrop = artifacts.require("TokenAirDrop");
+const MosaicDAO = artifacts.require("TokenAirDrop");
 
 module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(MosaicERC20);
