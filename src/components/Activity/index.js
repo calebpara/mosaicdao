@@ -1,15 +1,21 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import axios from 'axios'
 import Modal from 'react-bootstrap/Modal'
-import ModalDialog from 'react-bootstrap/ModalDialog'
-import ModalHeader from 'react-bootstrap/ModalHeader'
-import ModalTitle from 'react-bootstrap/ModalTitle'
-import ModalBody from 'react-bootstrap/ModalBody'
-import ModalFooter from 'react-bootstrap/ModalFooter'
+import {Button} from 'react-bootstrap'
 
 export default function Activity() {
 
     const [view, setView] = useState('ongoing')
+
+    const [modalState, setModalState] = useState(
+        {
+            image:null,
+            user:null,
+            votes: null,
+            address: null,
+            number: null,
+        }
+    )
 
     const [modal, setModal] = useState(false);
 
@@ -62,28 +68,36 @@ export default function Activity() {
             user.map((user)=> (
                 // this is fetching sample data from randomuser.me
                 // replace with our mosaic api/ ipfs etc etc 
-                <div style={{backgroundColor: '#F8F8F8', marginBottom: 4, borderStyle: 'solid', borderWidth: 1, borderColor: '#EAEAEA', borderRadius: 0, paddingTop: 8, paddingLeft: 8, paddingRight: 8, flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}
-                onClick={() => setModal(true)}
+                <div className="hvr-grow-small" style={{backgroundColor: '#F8F8F8', marginBottom: 4, borderStyle: 'solid', borderWidth: 1, borderColor: '#EAEAEA', borderRadius: 0, paddingTop: 8, paddingLeft: 8, paddingRight: 8, flexDirection: 'row', display: 'flex', justifyContent: 'space-between', cursor: 'pointer'}}
+                onClick={() => { 
+                    setModal(true);
+                    setModalState({
+                        image: user.picture.medium,
+                        votes: user.registered.age,
+                        address: user.login.md5,
+                        number: user.location.postcode,
+                    })
+                }}
                 >
                     <div>
                         <h8 style={{fontWeight: 600, color: '#8A8A8A'}}>
-                        #1234 
+                        #{user.location.postcode} 
                         </h8>
 
-                        <h8 style={{fontWeight: 400, color: '#38A0FF', paddingLeft: 8}}>
+                        {/* <h8 style={{fontWeight: 400, color: '#38A0FF', paddingLeft: 8}}>
                         Ends in:
                         </h8>
                         
                         <h8 style={{fontWeight: 400, color: '#38A0FF', paddingLeft: 8}}>
                         12:34
-                        </h8>
+                        </h8> */}
 
-                        <h6 style={{marginTop: 4}}> 
-                            Proposal Title
-                        </h6>
+                        <h5 style={{marginTop: 4}}> 
+                            Add Image
+                        </h5>
 
                         <h6 style={{marginTop: 16}}> 
-                            Votes: 1234
+                            Votes: {user.registered.age}
                         </h6>
                     </div>
                     <div>
@@ -100,14 +114,65 @@ export default function Activity() {
             ))}
         </ul>
         </div>
+
+
+        {/*------------ ONGOING PROPOSAL MODAL -------------------*/}
+
         <Modal
-        centered={true}
+        size="lg"
         show={modal}
         onHide={() => setModal(false)}
+        aria-labelledby="example-modal-sizes-title-lg"
         >
-        <div style={{width: '600px'}}>
-            <h3>Proposal #1234</h3>
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg">
+          <h6>
+            Propsal #{modalState.number} by 0x{modalState.address}
+          </h6>
+          <h5 style={{fontWeight: 600}}>
+            Add Image
+          </h5>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <img
+            objectFit="cover"
+            style={{ height: 'auto', width: 360, padding: 1, resize: ''}} 
+            variant="top" 
+            src={modalState.image}
+            alt="item"
+            />
         </div>
+
+        <div style={{marginTop: 40}}>
+            <h5 style={{fontWeight: 800}}>Propsal Description:</h5>
+        </div>
+
+        <div style={{marginTop: 16}}>
+            <h6 style={{fontWeight: 500}}>
+            Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum 
+            ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum
+            Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum 
+            ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum
+            </h6>
+        </div>
+
+        <div style={{marginTop: 40}}>
+            <h5 style={{fontWeight: 800}}>Should this image be added?</h5>
+        </div>
+
+        <div style={{marginTop: 16}}>
+            <h6 style={{fontWeight: 600}}>
+            Votes for
+            </h6>
+            <h6 style={{fontWeight: 600}}>
+            Votes against
+            </h6>
+        </div>
+
+
+        </Modal.Body>
       </Modal>
       </>
         )
