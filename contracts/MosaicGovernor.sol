@@ -17,15 +17,15 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
     {}
 
     function votingDelay() public pure override returns (uint256) {
-        return 1; // 1 block
+        return 0; // 1 block, 1
     }
 
     function votingPeriod() public pure override returns (uint256) {
-        return 45818; // 1 week
+        return 10; // 1 week, 45818
     }
 
     function proposalThreshold() public pure override returns (uint256) {
-        return 1e1;//1e18;
+        return 1e18;//1e18;
     }
 
     // The following functions are overrides required by Solidity.
@@ -76,14 +76,14 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
 
     function _executor()
     internal view virtual override(GovernorTimelockControl, Governor) returns (address) {
-        super._executor();
+        return super._executor();
     }
 
     function state(uint256 proposalId) public view virtual override(GovernorTimelockControl, Governor) returns (ProposalState) {
-        super.state(proposalId);
+        return super.state(proposalId);
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(GovernorTimelockControl, Governor) returns (bool) {
-        super.supportsInterface(interfaceId);
+        return super.supportsInterface(interfaceId);
     }
 }

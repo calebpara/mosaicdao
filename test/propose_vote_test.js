@@ -36,12 +36,17 @@ contract("Governance Tests", async accounts => {
       "Add the bathroom stall art to the gallery"
     );
 
+    const id = proposal.logs[0].args.proposalId;
+
     accounts.forEach(async account => {
-      await governor.castVote(proposal.proposalId , 1)
+      await governor.castVote(id, 1, {from: account})
     });
 
-    console.log(await governor.proposalEta(proposal.proposalId));
-    console.log(await governor.state(proposal.proposalId));
+    console.log(id.toString());
+    const res = await governor.state(id);
+    console.log(res.toString());
+    console.log(await governor.votingDelay().toString());
+    console.log(await governor.votingPeriod().toString());
 
 
 

@@ -4,8 +4,12 @@ const MosaicERC20 = artifacts.require("MosaicERC20");
 const MosaicDAO = artifacts.require("MosaicDAO");
 const MosaicGovernor = artifacts.require("MosaicGovernor");
 const TokenAirDrop = artifacts.require("TokenAirDrop");
+const MosaicTimelock = artifacts.require("MosaicTimelock");
 
 module.exports = async (deployer, network, accounts) => {
+  await deployer.deploy(MosaicTimelock, 0, [], []);
+  const timelock = await MosaicTimelock.deployed();
+
   await deployer.deploy(MosaicERC20);
   const erc20 = await MosaicERC20.deployed();
 
@@ -22,7 +26,7 @@ module.exports = async (deployer, network, accounts) => {
     new web3.utils.BN("1000000000000000000000") // 100 MOSAIC
   );
 
-  await deployer.deploy(MosaicGovernor, erc20.address);
+  await deployer.deploy(MosaicGovernor, erc20.address, timelock.address);
   let mosaicGovernor = await MosaicGovernor.deployed();
 
   await deployer.deploy(MosaicDAO, 5);
