@@ -3,7 +3,7 @@ const MosaicGovernor = artifacts.require("MosaicGovernor");
 const TokenAirDrop = artifacts.require("TokenAirDrop");
 const MosaicDAO = artifacts.require("MosaicDAO")
 
-contract("DAO Tests", async accounts => {
+contract("Governance Tests", async accounts => {
   before(async () => {
     erc20 = await MosaicERC20.deployed();
     tokenAirDrop = await TokenAirDrop.deployed();
@@ -11,17 +11,7 @@ contract("DAO Tests", async accounts => {
     mosaicDAO = await MosaicDAO.deployed();
   });
 
-  it("Airdrop 1 MOSAIC to all.", async () => {
-    // Airdrop each account 1 MOSAIC for science
-    accounts.forEach(async account => {
-      await erc20.approve(
-        account,
-        new web3.utils.BN("10000000000000000000") // 1 MOSAIC
-      )
-    });
-  });
-
-  it("Propose append", async () => {
+  it("Propose and Vote", async () => {
     accounts.forEach(async account => {
       await erc20.approve(
         account,
@@ -39,12 +29,22 @@ contract("DAO Tests", async accounts => {
           name: 'uri'
       }]
     }, ['https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu']);
-    await governor.propose(
+    const proposal = await governor.propose(
       [MosaicDAO.address],
       [0],
       [transferCalldata],
       "Add the bathroom stall art to the gallery"
     );
+
+    accounts.forEach(async account => {
+      await governor.castVote(proposal.proposalId , 1)
+    });
+
+    console.log(await governor.proposalEta(proposal.proposalId));
+    console.log(await governor.state(proposal.proposalId));
+
+
+
   });
 
 

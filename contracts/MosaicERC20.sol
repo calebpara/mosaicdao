@@ -13,6 +13,17 @@ contract MosaicERC20 is ERC20, ERC20Permit, ERC20Votes {
         uint256 _totalSupply = 1e21; 
         _mint(msg.sender, _totalSupply);
     }
+
+    function delegates(address account) 
+        public
+        view
+        virtual
+        override(ERC20Votes)
+        returns (address)
+    {
+        return account;
+    }
+
     function _afterTokenTransfer(address from, address to, uint256 amount)
         internal
         override(ERC20, ERC20Votes)

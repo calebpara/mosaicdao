@@ -6,12 +6,14 @@ import "@openzeppelin/contracts/governance/extensions/GovernorProposalThreshold.
 import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
-contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
-    constructor(ERC20Votes _token)
+contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
+    constructor(ERC20Votes _token, TimelockController timelock)
         Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(10)
+        GovernorTimelockControl(timelock)
     {}
 
     function votingDelay() public pure override returns (uint256) {
@@ -48,9 +50,40 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
 
     function propose(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description)
         public
-        override(Governor, GovernorProposalThreshold)
+        override(Governor, GovernorProposalThreshold, IGovernor)
         returns (uint256)
     {
         return super.propose(targets, values, calldatas, description);
+    }
+    function _execute(
+        uint256 proposalId, /* proposalId */
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal virtual override(GovernorTimelockControl, Governor) {
+        return super._execute(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _cancel(
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal virtual override(GovernorTimelockControl, Governor) returns (uint256) {
+        return super._cancel(targets, values, calldatas, descriptionHash);
+    }
+
+    function _executor()
+    internal view virtual override(GovernorTimelockControl, Governor) returns (address) {
+        super._executor();
+    }
+
+    function state(uint256 proposalId) public view virtual override(GovernorTimelockControl, Governor) returns (ProposalState) {
+        super.state(proposalId);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(GovernorTimelockControl, Governor) returns (bool) {
+        super.supportsInterface(interfaceId);
     }
 }
