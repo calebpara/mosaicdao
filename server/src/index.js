@@ -9,8 +9,9 @@ const { Canvas, Image } = require("canvas");
 const atob = require("atob");
 const app = express();
 
-const HallOfFame = require("../../client/src/contracts/ThousandNFT.json");
+const MosaicDAO = require("../../src/contracts/MosaicDAO.json");
 
+var currentVersion = [];
 var imgURL = "";
 
 const API_KEY =
@@ -29,7 +30,7 @@ const account = web3.eth.accounts.privateKeyToAccount(WALLET_KEY);
 
 const storageClient = new Web3Storage({ token: API_KEY });
 
-let NFTContract;
+let DAOContract;
 
 function dataURLtoFile(dataurl, filename) {
   var arr = dataurl.split(","),
@@ -45,6 +46,22 @@ function dataURLtoFile(dataurl, filename) {
   return new File([u8arr], filename, { type: mime });
 }
 
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+  // Please note that calling sort on an array will modify that array.
+  // you might want to clone your array first.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
@@ -53,101 +70,93 @@ app.use(function (req, res, next) {
 
 app.use(express.json());
 
+// Anyone can trigger an update
 app.post("/", async (req, res) => {
   try {
-    const body = req.body;
-    console.log(body);
-    console.log(web3.eth.accounts);
-    // TODO: verify that caller is the owner on smart contract
-    if (!NFTContract)
-      NFTContract = await new web3.eth.Contract(
-        HallOfFame.abi,
-        HallOfFame.networks[networkId].address,
-        {
-          from: account.address,
-        }
-      );
-
-    const currentLength = await NFTContract.methods.chainLength(body.id).call();
-    console.log(currentLength);
-
-    const currentOwner = await NFTContract.methods.ownerOf(body.id).call();
-
-    const updateMessage = "update " + body.id + " " + currentLength;
-
-    console.log(updateMessage);
-
-    sender = await web3.eth.accounts.recover(updateMessage, body.verification);
-    console.log(sender);
-    if (sender != currentOwner) {
-      res
-        .status(400)
-        .send(
-          "You do not have access to this token. Current owner: " + currentOwner
-        );
-      return;
-    }
-    const { window } = new jsdom.JSDOM(`<!DOCTYPE html>`, {
-      runScripts: "dangerously",
-    });
-    global.window = window;
-
-    const metadata = await probe(body.image_url);
-    if (
-      metadata.height != 256 ||
-      metadata.width != 256 ||
-      metadata.type != "png"
-    ) {
-      res
-        .status(400)
-        .send(
-          "incorrect image dimensions/type. Only PNG of 256x256 size is accepted"
-        );
-      return;
-    }
-    let mergedImage;
-    const fileName = "image.png";
-    if (imgURL == "") {
-      mergedImage = await mergeImages([{ src: body.image_url, x: 0, y: 0 }], {
-        Canvas: Canvas,
-        Image: Image,
-        width: 256,
-        height: 256,
-      });
-    } else {
-      console.log("already has image");
-      mergedImage = await mergeImages(
-        [
-          { src: imgURL, x: 0, y: 0 },
-          { src: body.image_url, x: 256, y: 0 },
-        ],
-        {
-          Canvas: Canvas,
-          Image: Image,
-          width: 512,
-          height: 256,
-        }
-      );
-    }
-    console.log("reached");
-    mergedImage = dataURLtoFile(mergedImage, fileName);
-
-    imgURL =
-      "https://ipfs.io/ipfs/" +
-      (await storageClient.put([mergedImage])) +
-      "/" +
-      fileName;
-    console.log("merge image uploaded");
-
-    console.log("uploaded to ipfs: ", imgURL);
-    delete global.window;
-    res.status(200).send("success");
   } catch (error) {
     res.status(400).send(error.toString());
   }
 });
 
 app.get("/", async function (req, res) {
+  if (req.query.update) {
+    try {
+      // compare latest version with current version
+
+      if (!DAOContract)
+        DAOContract = await new web3.eth.Contract(
+          MosaicDAO.abi,
+          MosaicDAO.networks[networkId].address,
+          {
+            from: account.address,
+          }
+        );
+
+      const latestVersion = await DAOContract.methods.getGalleryList().call();
+      const galleryWidth = await DAOContract.methods.galleryWidth().call();
+
+      if (arraysEqual(latestVersion, currentVersion)) {
+        res
+          .status(400)
+          .send("Gallery already reflects the latest on-chain state.");
+      }
+
+      const { window } = new jsdom.JSDOM(`<!DOCTYPE html>`, {
+        runScripts: "dangerously",
+      });
+      global.window = window;
+
+      // Future TODO: Add image properties check
+      // const metadata = await probe(body.image_url);
+      // if (
+      //   metadata.height != 256 ||
+      //   metadata.width != 256 ||
+      //   metadata.type != "png"
+      // ) {
+      //   res
+      //     .status(400)
+      //     .send(
+      //       "incorrect image dimensions/type. Only PNG of 256x256 size is accepted"
+      //     );
+      //   return;
+      // }
+      let mergedImage;
+      const fileName = "image.png";
+
+      gallerySpecification = [];
+      for (let i = 0; i < latestVersion.length; i++) {
+        gallerySpecification += [
+          {
+            src: latestVersion[i],
+            x: 256 * (i % galleryWidth),
+            y: 256 * Math.floor(i / galleryWidth),
+          },
+        ];
+      }
+
+      mergedImage = await mergeImages(gallerySpecification, {
+        Canvas: Canvas,
+        Image: Image,
+        width: 256 * galleryWidth,
+        height: 256 * Math.ceil(i / galleryWidth),
+      });
+
+      mergedImage = dataURLtoFile(mergedImage, fileName);
+
+      imgURL =
+        "https://ipfs.io/ipfs/" +
+        (await storageClient.put([mergedImage])) +
+        "/" +
+        fileName;
+      console.log("merge image uploaded");
+
+      console.log("uploaded to ipfs: ", imgURL);
+      delete global.window;
+    } catch (error) {
+      res.status(400).send(error.toString());
+    }
+  }
+
   if (imgURL == "") {
     res.status(400).send("no picture uploaded");
   } else {
