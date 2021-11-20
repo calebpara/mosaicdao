@@ -100,6 +100,7 @@ app.get("/", async function (req, res) {
         res
           .status(400)
           .send("Gallery already reflects the latest on-chain state.");
+        return;
       }
 
       const { window } = new jsdom.JSDOM(`<!DOCTYPE html>`, {
@@ -126,20 +127,19 @@ app.get("/", async function (req, res) {
 
       gallerySpecification = [];
       for (let i = 0; i < latestVersion.length; i++) {
-        gallerySpecification += [
-          {
-            src: latestVersion[i],
-            x: 256 * (i % galleryWidth),
-            y: 256 * Math.floor(i / galleryWidth),
-          },
-        ];
+        gallerySpecification.push({
+          src: latestVersion[i],
+          x: 256 * (i % galleryWidth),
+          y: 256 * Math.floor(i / galleryWidth),
+        });
       }
 
+      console.log(gallerySpecification);
       mergedImage = await mergeImages(gallerySpecification, {
         Canvas: Canvas,
         Image: Image,
         width: 256 * galleryWidth,
-        height: 256 * Math.ceil(i / galleryWidth),
+        height: 256 * Math.ceil(latestVersion.length / galleryWidth),
       });
 
       mergedImage = dataURLtoFile(mergedImage, fileName);
@@ -152,9 +152,12 @@ app.get("/", async function (req, res) {
       console.log("merge image uploaded");
 
       console.log("uploaded to ipfs: ", imgURL);
+
+      currentVersion = latestVersion;
       delete global.window;
     } catch (error) {
       res.status(400).send(error.toString());
+      return;
     }
   }
   if (imgURL == "") {

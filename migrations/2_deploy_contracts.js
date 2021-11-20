@@ -28,5 +28,12 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(MosaicDAO, 5);
   let mosaicDAO = await MosaicDAO.deployed();
 
+  await mosaicDAO.appendImage(
+    "https://bafybeiau2675bek3hsschrxqn43ohuygj42sqsjzqvv3q4ksknfrqphdsa.ipfs.dweb.link/img1.jpg"
+  );
+  await mosaicDAO.appendImage(
+    "https://bafybeih4ooehbzdomc26uzfswirbsobavftrurveig6hyaqe3upkpnwloe.ipfs.dweb.link/img2.jpg"
+  );
+
   await mosaicDAO.transferOwnership(mosaicGovernor.address);
 };
