@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import ActionPanel from "../../components/ActionPanel";
 import UserContext from "../../context/UserContext";
-import Mosaic from '../../components/Mosaic';
-import {Container} from 'react-bootstrap'
-import {Col, Row, Button} from 'react-bootstrap'
-import Activity from '../../components/Activity';
-import logo from '../../assets/images/moslogo.png'
+import Mosaic from "../../components/Mosaic";
+import { Container } from "react-bootstrap";
+import { Col, Row, Button } from "react-bootstrap";
+import Activity from "../../components/Activity";
+import logo from "../../assets/images/moslogo.png";
 
 function Home() {
   const { contracts, account } = useContext(UserContext);
@@ -33,45 +33,65 @@ function Home() {
     }
   };
 
+  const onPropose = async () => {};
+
   return (
     <Container fluid>
-
-        {/* <p>Token Balance: {userERC20Balance}</p>
+      {/* <p>Token Balance: {userERC20Balance}</p>
         <Button variant="outlined">Vote</Button>
         <Button variant="outlined" onClick={onRequestAirDrop}>
           Request Airdrop
         </Button> */}
 
-        <Row style={{ paddingBottom: '6vh', alignItems: 'center', justifyContent: 'center'}}>
+      <Row
+        style={{
+          paddingBottom: "6vh",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <img
-            src={logo}
-            alt="logo"
-            style={{
-              height: 'auto', 
-              width: 400, 
-            }}
-          />
-          <h4 style={{textAlign: 'center', paddingTop: 32}}>We're redefining collaborative art curation.</h4>
-        <Button variant="dark" size="lg" style={{width: 200, borderRadius: 0, marginTop: 32}} className="hvr-grow">
+          src={logo}
+          alt="logo"
+          style={{
+            height: "auto",
+            width: 400,
+          }}
+        />
+        <h4 style={{ textAlign: "center", paddingTop: 32 }}>
+          We're redefining collaborative art curation.
+        </h4>
+        <Button
+          variant="dark"
+          size="lg"
+          style={{ width: 200, borderRadius: 0, marginTop: 32 }}
+          className="hvr-grow"
+        >
           Create a proposal
         </Button>
-        </Row>
+      </Row>
 
-        <Row style={{paddingBottom: '10vh'}}>
-        <Col sm={{span: 8, order: 2}} style={{paddingTop: '6vh'}}>
-            <Mosaic />
-          </Col>
-          <Col sm={{span: 4, order: 1}} style={{paddingTop: '6vh'}}>
+      <Row style={{ paddingBottom: "10vh" }}>
+        <Col sm={{ span: 8, order: 2 }} style={{ paddingTop: "6vh" }}>
+          <Mosaic />
+        </Col>
+        <Col sm={{ span: 4, order: 1 }} style={{ paddingTop: "6vh" }}>
           <Activity />
-          </Col>
-          
-        </Row>
+        </Col>
+      </Row>
 
-        <Row style={{ paddingBottom: '6vh', alignItems: 'center', justifyContent: 'center'}}>
-          <h7 style={{textAlign: 'center', fontWeight: 800}}>@2021 MosaicDAO</h7>
-        </Row>
+      <Row
+        style={{
+          paddingBottom: "6vh",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <h7 style={{ textAlign: "center", fontWeight: 800 }}>
+          @2021 MosaicDAO
+        </h7>
+      </Row>
     </Container>
-
   );
 }
 

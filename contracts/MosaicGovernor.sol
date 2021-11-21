@@ -9,6 +9,11 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFractio
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
 contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
+
+    event ProposalDetails(uint256 proposalId, uint256 incrementingId, string uri, string action);
+
+    uint256 totalProposals = 0; 
+
     constructor(ERC20Votes _token, TimelockController timelock)
         Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
@@ -53,8 +58,20 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
         override(Governor, GovernorProposalThreshold, IGovernor)
         returns (uint256)
     {
-        return super.propose(targets, values, calldatas, description);
+        return 0;
     }
+
+    // This is a temporary unsafe implementation 
+    function proposeWithDetails(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description, string memory uri, string memory action)
+        public
+        returns (uint256 proposalId)
+    {
+        proposalId = super.propose(targets, values, calldatas, description);
+        emit ProposalDetails(proposalId, totalProposals, uri, action); 
+        totalProposals += 1; 
+    }
+
+
     function _execute(
         uint256 proposalId, /* proposalId */
         address[] memory targets,

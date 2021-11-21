@@ -1,4 +1,5 @@
-const web3 = require("web3");
+const Web3 = require("web3");
+var web3 = new Web3(Web3.givenProvider);
 
 const MosaicERC20 = artifacts.require("MosaicERC20");
 const MosaicDAO = artifacts.require("MosaicDAO");
@@ -16,14 +17,14 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(
     TokenAirDrop,
     erc20.address,
-    new web3.utils.BN("10000000000000000") // 0.01 MOSAIC
+    new Web3.utils.BN("10000000000000000") // 0.01 MOSAIC
   );
   const tokenAirDrop = await TokenAirDrop.deployed();
 
   // Approve airdrop to transfer funds to requestors
   await erc20.approve(
     tokenAirDrop.address,
-    new web3.utils.BN("1000000000000000000000") // 100 MOSAIC
+    new Web3.utils.BN("1000000000000000000000") // 100 MOSAIC
   );
 
   await deployer.deploy(MosaicGovernor, erc20.address, timelock.address);
@@ -40,4 +41,29 @@ module.exports = async (deployer, network, accounts) => {
   );
 
   await mosaicDAO.transferOwnership(mosaicGovernor.address);
+
+  const transferCalldata = web3.eth.abi.encodeFunctionCall(
+    {
+      name: "appendImage",
+      type: "function",
+      inputs: [
+        {
+          type: "string",
+          name: "uri",
+        },
+      ],
+    },
+    ["https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu"]
+  );
+
+  const proposal = await mosaicGovernor.proposeWithDetails(
+    [MosaicDAO.address],
+    [0],
+    [transferCalldata],
+    "Add the bathroom stall art to the gallery",
+    "https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu",
+    "Add"
+  );
+
+  console.log(await mosaicGovernor.getPastEvents("ProposalCreated"));
 };
