@@ -15,16 +15,6 @@ import axios from 'axios'
 
 function Home() {
   const [showResults, setShowResults] = useState(0)
-
-  const [selectedState, setselectedState] = useState(
-    {
-        image:null,
-        user:null,
-        votes: null,
-        address: null,
-        number: null,
-    }
-)
   
   const[selectedImage ,setSelectedImage] = useState(0)
 
