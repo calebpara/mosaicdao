@@ -11,8 +11,7 @@ import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
 import FormCheck from "react-bootstrap/FormCheck";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-const { Web3Storage, File } = require("web3.storage");
-
+// import { Web3Storage, File } from "web3.storage/dist/bundle.esm.min.js";
 import axios from "axios";
 
 function Home() {
@@ -33,25 +32,30 @@ function Home() {
 
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
-
+  const [removeIndex, setRemoveIndex] = useState(-1);
   const [description, setDescription] = useState("");
+  const [gallery, setGallery] = useState({ width: 0, images: [] });
 
   const { contracts, account, web3 } = useContext(UserContext);
   const [userERC20Balance, setUserERC20Balance] = useState(0.0);
 
   useEffect(() => {
-    getUser();
-  }, []);
+    if (contracts["MosaicDAO"]) populateGallery();
+  }, [contracts]);
 
-  const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getUser = async () => {
+  const populateGallery = async () => {
+    let tup = await contracts["MosaicDAO"].methods.getGalleryList().call();
+    let images = tup[0].map((e, i) => {
+      return { uri: e, id: tup[1][i] };
+    });
+    console.log(images);
     try {
-      // sample data from randomuser.me
-      // replace with our mosaic api/ ipfs etc etc
-      const res = await axios.get("https://randomuser.me/api/?results=100");
-      setUser(res.data.results);
+      setGallery({
+        width: await contracts["MosaicDAO"].methods.galleryWidth().call(),
+        images: images,
+      });
       setLoading(true);
     } catch (err) {
       alert(err.message);
@@ -80,12 +84,12 @@ function Home() {
     <>
       <div className="container">
         {loading &&
-          user.map((user, index) => (
+          gallery.images.map((image) => (
             // this is fetching sample data from randomuser.me
             // replace with our mosaic api/ ipfs etc etc
-            <div key={user.login.uuid}>
+            <div key={image.id}>
               <img
-                onClick={(e) => setSelectedImage(index)}
+                onClick={(e) => setSelectedImage(image.id)}
                 className="hvr-grow"
                 style={{
                   objectFit: "contain",
@@ -94,14 +98,13 @@ function Home() {
                   padding: 1,
                 }}
                 variant="top"
-                src={user.picture.medium}
+                src={image.uri}
                 alt="item"
               />
             </div>
           ))}
       </div>
       <div>
-        <h5>Remove:</h5>
         {/* <img
       className="hvr-grow"
       style={{objectFit: "contain", height: 100, width: 100, padding: 1}} 
@@ -146,9 +149,17 @@ function Home() {
 
   const onPropose = async () => {
     if (showResults == 0) {
-      const storageClient = new Web3({ token: API_KEY });
-      const f = new File([image], fileName, { type: "image/png" });
-
+      // TODO: Fix web3.storage related issues
+      // const storageClient = new Web3({ token: API_KEY });
+      // const f = new File([image], "image.png", { type: "image/png" });
+      // const imgURL =
+      //   "https://ipfs.io/ipfs/" +
+      //   (await storageClient.put([f])) +
+      //   "/" +
+      //   fileName;
+      // console.log(imgURL);
+      const imgURL =
+        "https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu";
       const transferCalldata = web3.eth.abi.encodeFunctionCall(
         {
           name: "appendImage",
@@ -160,9 +171,8 @@ function Home() {
             },
           ],
         },
-        ["https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu"]
+        [imgURL]
       );
-
       const proposal = await contracts[
         "MosaicGovernor"
       ].methods.proposeWithDetails(
@@ -170,9 +180,11 @@ function Home() {
         [0],
         [transferCalldata],
         "Add the bathroom stall art to the gallery",
-        "https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu",
+        imgURL,
         "Add"
       );
+      console.log(proposal);
+    } else {
     }
   };
 
