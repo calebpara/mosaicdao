@@ -138,15 +138,16 @@ function Home() {
         </Button> */}
 
         <Row style={{ paddingBottom: '6vh', alignItems: 'center', justifyContent: 'center'}}>
-        <img
+        {/* <img
             src={logo}
             alt="logo"
             style={{
               height: 'auto', 
               width: 400, 
             }}
-          />
-          <h4 style={{textAlign: 'center', paddingTop: 32}}>We're redefining collaborative art curation.</h4>
+          /> */}
+          <h1 style={{textAlign: 'center', paddingTop: 32, fontWeight: 900}}>MosaicDAO</h1>
+          <h4 style={{textAlign: 'center', paddingTop: 16}}>Collaborative art curation, redefined.</h4>
         <Button 
         variant="dark" 
         size="lg" 
