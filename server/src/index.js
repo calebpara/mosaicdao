@@ -9,7 +9,7 @@ const { Canvas, Image } = require("canvas");
 const atob = require("atob");
 const app = express();
 
-const MosaicDAO = require("../../src/contracts/MosaicDAO.json");
+const MosaicDAO = require("./MosaicDAO.json");
 
 var currentVersion = [];
 var imgURL = "";

@@ -1,36 +1,22 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Runs the image grid server.",
+  "main": "./src/index.js",
   "scripts": {
-    "run": "node index.js",
-    "build": "webpack"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "atob": "^2.1.2",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "canvas": "^2.8.0",
-    "crypto-browserify": "^3.12.0",
     "express": "^4.17.1",
-    "file-class": "^0.1.3",
-    "https-browserify": "^1.0.0",
-    "js-ipfs": "0.0.301",
-    "jsdom": "^17.0.0",
+    "jsdom": "^18.1.0",
     "merge-images": "^2.0.0",
-    "node-fetch": "^2.6.1",
-    "os-browserify": "^0.3.0",
-    "probe-image-size": "^7.2.1",
-    "stream-http": "^3.2.0",
-    "url": "^0.11.0",
-    "web3": "^1.5.2",
-    "web3.storage": "^3.3.0"
-  },
-  "devDependencies": {
-    "node-loader": "^2.0.0",
-    "webpack": "^5.52.0",
-    "webpack-cli": "^4.8.0"
+    "probe-image-size": "^7.2.2",
+    "web3": "^1.6.1",
+    "web3.storage": "^3.3.4"
   }
 }
