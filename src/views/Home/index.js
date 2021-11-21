@@ -14,8 +14,19 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import axios from 'axios'
 
 function Home() {
-  const [showResults, setShowResults] = React.useState(false)
+  const [showResults, setShowResults] = useState(0)
+
+  const [selectedState, setselectedState] = useState(
+    {
+        image:null,
+        user:null,
+        votes: null,
+        address: null,
+        number: null,
+    }
+)
   
+  const[selectedImage ,setSelectedImage] = useState(0)
 
   const [modal, setModal] = useState(false);
 
@@ -43,18 +54,24 @@ function Home() {
         }
     };
 
+  
 
-  const onClick = () => setShowResults(true)
+  const onClick = (e, val) => {
+    setShowResults(e.target.value)
+    console.log(e.target.value)
+  }
 
 
   const Remove = () => (
+    <>
     <div className="container">
       {loading &&
-      user.map((user)=> (
+      user.map((user, index)=> (
           // this is fetching sample data from randomuser.me
           // replace with our mosaic api/ ipfs etc etc 
           <div key={user.login.uuid}>
               <img
+              onClick={e => setSelectedImage(index)}
               className="hvr-grow"
               style={{objectFit: "contain", height: 100, width: 100, padding: 1}} 
               variant="top" 
@@ -64,6 +81,17 @@ function Home() {
           </div>
         ))}
     </div>
+    <div>
+      <h5>Remove:</h5>
+      {/* <img
+      className="hvr-grow"
+      style={{objectFit: "contain", height: 100, width: 100, padding: 1}} 
+      variant="top" 
+      src={}
+      alt="item"
+      /> */}
+    </div>
+    </>
   )
 
   const Add = () => (
@@ -165,18 +193,18 @@ function Home() {
 
     <Form.Select aria-label="Default select example" onChange={onClick}>
 
-      <option value="1">
+      <option value={0}>
       Add an Image
       </option>
 
-      <option value="2">
+      <option value={1}>
       Remove an Image
       </option>
 
     </Form.Select>
 
     <div>
-    { showResults ? <Remove /> : <Add /> }
+    { showResults === 0 ? <Remove /> : <Add /> }
     </div>
 
     <div style={{marginTop: 40}}>

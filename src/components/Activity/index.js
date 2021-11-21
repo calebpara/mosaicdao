@@ -185,9 +185,9 @@ export default function Activity() {
             <div style={{flex: 1, backgroundColor: 'red'}}
             onClick={() => handleClick('ongoing')}
             >
-                <h5 style={{textAlign: 'center'}}>
-                    Ongoing proposals
-                </h5>
+            <h5 style={{textAlign: 'center'}}>
+                Ongoing proposals
+            </h5>
             </div>
             <div style={{flex: 1}}
             onClick={() => handleClick('history')}
