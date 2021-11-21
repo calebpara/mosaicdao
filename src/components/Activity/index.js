@@ -24,8 +24,7 @@ export default function Activity() {
 
   useEffect(() => {
     if (contracts["MosaicGovernor"]) {
-      getOngoing();
-      getHistory();
+      populateEvents(); 
     }
   }, [contracts]);
 
@@ -33,7 +32,7 @@ export default function Activity() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getOngoing = async () => {
+  const populateEvents = async () => {
     try {
       // sample data from randomuser.me
       // replace with our mosaic api/ ipfs etc etc
@@ -56,24 +55,12 @@ export default function Activity() {
         Object.assign({}, obj, ProposalDetails[i].returnValues)
       );
       setOngoing(Proposals);
-      console.log(Proposals);
       setLoading(true);
     } catch (err) {
       alert(err.message);
     }
   };
 
-  const getHistory = async () => {
-    try {
-      // sample data from randomuser.me
-      // replace with our mosaic api/ ipfs etc etc
-      const res = await axios.get("https://randomuser.me/api/?results=50");
-      setHistory(res.data.results);
-      setLoading(true);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
 
   function Ongoing() {
     return (
