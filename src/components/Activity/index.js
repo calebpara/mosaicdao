@@ -21,7 +21,7 @@ export default function Activity() {
 
     const handleClick = (viewState) => {
         setView(viewState)
-      }
+    }
 
     useEffect(() => {
         getUser()

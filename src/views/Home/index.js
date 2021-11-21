@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import ActionPanel from "../../components/ActionPanel";
 import UserContext from "../../context/UserContext";
 import Mosaic from '../../components/Mosaic';
@@ -6,10 +6,76 @@ import {Container} from 'react-bootstrap'
 import {Col, Row, Button} from 'react-bootstrap'
 import Activity from '../../components/Activity';
 import logo from '../../assets/images/moslogo.png'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import FormControl from 'react-bootstrap/FormControl'
+import FormCheck from 'react-bootstrap/FormCheck'
+import FloatingLabel from 'react-bootstrap/FloatingLabel'
+import axios from 'axios'
 
 function Home() {
+  const [showResults, setShowResults] = React.useState(false)
+  
+
+  const [modal, setModal] = useState(false);
+
+  const [description, setDescription] = useState('');
+
   const { contracts, account } = useContext(UserContext);
   const [userERC20Balance, setUserERC20Balance] = useState(0.0);
+
+      useEffect(() => {
+        getUser()
+    }, [])
+
+    const [user, setUser] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const getUser = async () => {
+        try {
+            // sample data from randomuser.me
+            // replace with our mosaic api/ ipfs etc etc 
+            const res = await axios.get("https://randomuser.me/api/?results=100");
+            setUser(res.data.results);
+            setLoading(true);
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+
+  const onClick = () => setShowResults(true)
+
+
+  const Remove = () => (
+    <div className="container">
+      {loading &&
+      user.map((user)=> (
+          // this is fetching sample data from randomuser.me
+          // replace with our mosaic api/ ipfs etc etc 
+          <div key={user.login.uuid}>
+              <img
+              className="hvr-grow"
+              style={{objectFit: "contain", height: 100, width: 100, padding: 1}} 
+              variant="top" 
+              src={user.picture.medium}
+              alt="item"
+              />
+          </div>
+        ))}
+    </div>
+  )
+
+  const Add = () => (
+    <>
+    <Form.Group controlId="formFile" style={{marginTop: 16}}>
+    <Form.Label>Choose an image (must be 256x256 pixels)</Form.Label>
+    <Form.Control type="file" />
+    </Form.Group>
+
+    </>
+  )
+
 
   // Run once when page loaded
   useEffect(() => {
@@ -34,6 +100,7 @@ function Home() {
   };
 
   return (
+    <>
     <Container fluid>
 
         {/* <p>Token Balance: {userERC20Balance}</p>
@@ -52,7 +119,15 @@ function Home() {
             }}
           />
           <h4 style={{textAlign: 'center', paddingTop: 32}}>We're redefining collaborative art curation.</h4>
-        <Button variant="dark" size="lg" style={{width: 200, borderRadius: 0, marginTop: 32}} className="hvr-grow">
+        <Button 
+        variant="dark" 
+        size="lg" 
+        style={{width: 200, borderRadius: 0, marginTop: 32}} 
+        className="hvr-grow"
+        onClick={() => {
+          setModal(true);
+        }}
+        >
           Create a proposal
         </Button>
         </Row>
@@ -71,6 +146,69 @@ function Home() {
           <h7 style={{textAlign: 'center', fontWeight: 800}}>@2021 MosaicDAO</h7>
         </Row>
     </Container>
+
+
+    <Modal
+    size="lg"
+    show={modal}
+    onHide={() => setModal(false)}
+    aria-labelledby="example-modal-sizes-title-lg"
+    >
+    <Modal.Header closeButton>
+      <Modal.Title id="example-modal-sizes-title-lg">
+      <h5 style={{fontWeight: 600}}>
+        Create a proposal
+      </h5>
+      </Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+
+    <Form.Select aria-label="Default select example" onChange={onClick}>
+
+      <option value="1">
+      Add an Image
+      </option>
+
+      <option value="2">
+      Remove an Image
+      </option>
+
+    </Form.Select>
+
+    <div>
+    { showResults ? <Remove /> : <Add /> }
+    </div>
+
+    <div style={{marginTop: 40}}>
+        <h5 style={{fontWeight: 800}}>Propsal Description:</h5>
+    </div>
+
+    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+    <Form.Control 
+    value = {description}
+    onChange={e => setDescription(e.target.value)}
+    as="textarea" 
+    rows={10} 
+    placeholder="Describe your proposal"
+    />
+    </Form.Group>
+
+    <div style={{display: 'flex', justifyContent: 'center'}}>
+    <Button 
+      variant="dark" 
+      size="lg" 
+      style={{width: 200, borderRadius: 0, marginTop: 20, marginBottom: 20}} 
+      className="hvr-grow"
+      onClick={() => {
+        console.log(description)
+      }}
+      >
+        Submit Proposal
+      </Button>
+    </div>
+    </Modal.Body>
+  </Modal>
+  </>
 
   );
 }
