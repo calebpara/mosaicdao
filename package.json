@@ -19,7 +19,8 @@
     "react-router-dom": "6",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1",
-    "web3": "^1.6.1"
+    "web3": "^1.6.1",
+    "web3.storage": "^3.3.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@types/web3": "^1.2.2"
+    "@types/web3": "^1.2.2",
+    "truffle": "^5.4.21"
   }
 }
