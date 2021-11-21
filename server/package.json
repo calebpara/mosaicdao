@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "mosaicdaorpc",
   "version": "1.0.0",
   "description": "Runs the image grid server.",
   "main": "./src/index.js",

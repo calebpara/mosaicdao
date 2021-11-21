@@ -1,16 +1,13 @@
+var express = require("express");
 const { Web3Storage, File } = require("web3.storage");
 const mergeImages = require("merge-images");
-const probe = require("probe-image-size");
+// const probe = require("probe-image-size");
 const Web3 = require("web3");
 const axios = require("axios");
-const express = require("express");
 const jsdom = require("jsdom");
-const { Canvas, Image } = require("canvas");
 const atob = require("atob");
-const app = express();
-
-
 const MosaicDAO = require("./MosaicDAO.json");
+const { Canvas, Image } = require("canvas");
 
 var currentVersion = [];
 var imgURL = "";
@@ -21,9 +18,11 @@ const API_KEY =
 const WALLET_KEY =
   "0x0b2b5ad1a40278a7def9beec3d653115368d76809444fe31834aa7b285504962";
 
-const provider = new Web3.providers.HttpProvider("http://localhost:7545");
+const provider = new Web3.providers.HttpProvider(
+  "https://matic-mumbai.chainstacklabs.com"
+);
 
-const networkId = 5777;
+const networkId = 80001;
 
 const web3 = new Web3(provider);
 
@@ -63,23 +62,17 @@ function arraysEqual(a, b) {
   return true;
 }
 
+// declare a new express app
+var app = express();
+
+// Enable CORS for all methods
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
   next();
 });
 
-app.use(express.json());
-
-// Anyone can trigger an update
-app.post("/", async (req, res) => {
-  try {
-  } catch (error) {
-    res.status(400).send(error.toString());
-  }
-});
-
-app.get("/", async function (req, res) {
+app.get("/imgrpc", async function (req, res) {
   if (req.query.update) {
     try {
       // compare latest version with current version
@@ -167,6 +160,11 @@ app.get("/", async function (req, res) {
       await axios({ method: "get", url: imgURL, responseType: "stream" })
     ).data.pipe(res);
   }
+});
+var port = process.env.PORT || 3000;
+
+app.listen(port, function () {
+  console.log("App started");
 });
 
 const PORT = 3001
