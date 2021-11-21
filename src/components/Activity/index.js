@@ -10,10 +10,8 @@ import {
 import "hammerjs";
 import UserContext from "../../context/UserContext";
 
-const [firstSeries, secondSeries, thirdSeries] = [[1], [5], [2]];
-
 export default function Activity() {
-  const { contracts, account } = useContext(UserContext);
+  const { contracts, account, web3 } = useContext(UserContext);
   const [view, setView] = useState("ongoing");
 
   const [modalState, setModalState] = useState({
@@ -41,103 +39,177 @@ export default function Activity() {
   const [loading, setLoading] = useState(false);
   const [globals, setGlobals] = useState({
     totalSupply: 1,
+    decimals: 1,
   });
 
   const populateEvents = async () => {
-    try {
-      // sample data from randomuser.me
-      // replace with our mosaic api/ ipfs etc etc
-      const res = await axios.get("https://randomuser.me/api/?results=50");
+    setLoading(true);
+    const blockNumber = (await web3.eth.getBlockNumber()) - 1;
+    console.log(blockNumber);
+    // sample data from randomuser.me
+    // replace with our mosaic api/ ipfs etc etc
+    const res = await axios.get("https://randomuser.me/api/?results=50");
 
-      setGlobals({
-        totalSupply: await contracts["MosaicERC20"].methods
-          .totalSupply()
-          .call(),
-      });
+    setGlobals({
+      totalSupply: await contracts["MosaicERC20"].methods.totalSupply().call(),
+      decimals: await contracts["MosaicERC20"].methods.decimals().call(),
+    });
 
-      let ProposalDetails = await contracts["MosaicGovernor"].getPastEvents(
-        "ProposalDetails",
-        {
-          fromBlock: 1,
-        }
-      );
-      let ProposalCreations = await contracts["MosaicGovernor"].getPastEvents(
-        "ProposalCreated",
-        {
-          fromBlock: 1,
-        }
-      );
+    console.log(contracts["MosaicGovernor"]);
 
-      let Proposals = await ProposalCreations.map(async (obj, i) => {
+    let ProposalDetails = await contracts["MosaicGovernor"].getPastEvents(
+      "ProposalDetails",
+      {
+        fromBlock: 21741190,
+      }
+    );
+    let ProposalCreations = await contracts["MosaicGovernor"].getPastEvents(
+      "ProposalCreated",
+      {
+        fromBlock: 21741190,
+      }
+    );
+
+    let Proposals = await Promise.all(
+      ProposalCreations.map(async (obj, i) => {
         let dict = Object.assign({}, obj, ProposalDetails[i].returnValues);
-        console.log(numFor);
 
-        let numFor = (
-          await contracts["MosaicGovernor"].getPastEvents("VoteCast", {
-            fromBlock: dict.returnValues.startBlock,
-            toBlock: dict.returnValues.endBlock,
-            proposalId: dict.proposalId,
-            support: 0,
-          })
-        ).reduce((a, b) => a + b.returnValues.weight, 0);
+        let votes = await contracts["MosaicGovernor"].methods
+          .proposalVotes(dict.proposalId)
+          .call();
 
-        let numAgainst = (
-          await contracts["MosaicGovernor"].getPastEvents("VoteCast", {
-            fromBlock: dict.returnValues.startBlock,
-            toBlock: dict.returnValues.endBlock,
-            proposalId: dict.proposalId,
-            support: 1,
-          })
-        ).reduce((a, b) => a + b.returnValues.weight, 0);
+        let numFor = votes[1];
+        let numAgainst = votes[0];
 
         dict["numFor"] = numFor;
         dict["numAgainst"] = numAgainst;
         dict["quorum"] = await contracts["MosaicGovernor"].methods
-          .quorum(dict.returnValues.endBlock)
+          .quorum(
+            blockNumber > parseInt(dict.returnValues.endBlock)
+              ? parseInt(dict.returnValues.endBlock)
+              : blockNumber
+          )
           .call();
-
+        dict["state"] = parseInt(
+          await contracts["MosaicGovernor"].methods
+            .state(dict.proposalId)
+            .call()
+        );
         return dict;
-      });
-      setOngoing(Proposals);
-      setLoading(true);
-    } catch (err) {
-      alert(err.message);
-    }
+      })
+    );
+    console.log(Proposals);
+
+    setOngoing(Proposals.filter((proposal) => proposal.state in [0, 1, 4]));
+    setHistory(Proposals.filter((proposal) => proposal.state in [7]));
+    setLoading(false);
   };
 
   const vote = async (id, support) => {
-    await contracts["MosaicGovernor"].castVote(id, support, { from: account });
+    // Execute
+    if (support == -1) {
+      try {
+        await contracts["MosaicGovernor"].methods
+          .execute(id)
+          .send({ from: account });
+      } catch (err) {
+        alert(err.toString());
+      }
+      return;
+    }
+    await contracts["MosaicGovernor"].methods
+      .castVote(id, support)
+      .send({ from: account });
   };
 
-  function Ongoing() {
+  const conditionalButtons = (state) => {
+    switch (state) {
+      case 0:
+      case 1:
+        return (
+          <>
+            <Button
+              variant="dark"
+              size="lg"
+              style={{
+                width: 160,
+                borderRadius: 0,
+                marginTop: 20,
+                marginBottom: 20,
+                marginRight: 8,
+                backgroundColor: "#149638",
+                borderWidth: 0,
+                fontWeight: 600,
+              }}
+              className="hvr-grow"
+              onClick={() => {
+                vote(modalState.proposalId, 1);
+              }}
+            >
+              Vote For
+            </Button>
+
+            <Button
+              variant="dark"
+              size="lg"
+              style={{
+                width: 160,
+                borderRadius: 0,
+                marginTop: 20,
+                marginBottom: 20,
+                marginLeft: 8,
+                backgroundColor: "#DD2E2E",
+                borderWidth: 0,
+                fontWeight: 600,
+              }}
+              className="hvr-grow"
+              onClick={() => {
+                vote(modalState.proposalId, 0);
+              }}
+            >
+              Vote Against
+            </Button>
+          </>
+        );
+
+      case 4:
+        return (
+          <Button
+            variant="dark"
+            size="lg"
+            style={{
+              width: 160,
+              borderRadius: 0,
+              marginTop: 20,
+              marginBottom: 20,
+              marginLeft: 8,
+              backgroundColor: "#DD2E2E",
+              borderWidth: 0,
+              fontWeight: 600,
+            }}
+            className="hvr-grow"
+            onClick={() => {
+              vote(modalState.proposalId, -1);
+            }}
+          >
+            Execute
+          </Button>
+        );
+      default:
+        return <></>;
+    }
+  };
+
+  function ListProposals({ proposals, label }) {
     return (
       <>
         <div>
-          <div style={{ display: "flex", paddingTop: 0, paddingBottom: 12 }}>
-            <div
-              className="hvr-grow"
-              style={{ flex: 1, cursor: "pointer" }}
-              onClick={() => handleClick("ongoing")}
-            >
-              <h5 style={{ textAlign: "center", fontWeight: 800 }}>
-                Ongoing proposals
-              </h5>
-            </div>
-            <div
-              className="hvr-grow"
-              style={{ flex: 1, cursor: "pointer" }}
-              onClick={() => handleClick("history")}
-            >
-              <h5 style={{ textAlign: "center", fontWeight: 800 }}>
-                Proposal history
-              </h5>
-            </div>
-          </div>
           <ul style={{ height: "700px", overflowY: "scroll" }}>
-            {ongoing &&
-              ongoing.map((entry) => (
+            {proposals.length > 0 &&
+              proposals.map((entry) => (
                 // this is fetching sample data from randomuser.me
                 // replace with our mosaic api/ ipfs etc etc
+
                 <div
                   className="hvr-grow-small"
                   style={{
@@ -161,10 +233,15 @@ export default function Activity() {
                       address: entry.returnValues.proposer,
                       number: entry.incrementingId,
                       description: entry.returnValues.description,
+                      startBlock: entry.returnValues.startBlock,
+                      endBlock: entry.returnValues.endBlock,
                       numFor: entry.numFor,
                       numAgainst: entry.numAgainst,
                       quorum: entry.quorum,
+                      proposalId: entry.proposalId,
+                      state: entry.state,
                     });
+                    console.log(entry.returnValues);
                     setModal(true);
                   }}
                 >
@@ -182,10 +259,11 @@ export default function Activity() {
                         </h8> */}
 
                     <h5 style={{ marginTop: 4 }}>
-                      {entry.returnValues.description.substr(0, 40) +
-                        (entry.returnValues.description.length > 40
-                          ? "..."
-                          : "")}
+                      {entry.returnValues &&
+                        entry.returnValues.description.substr(0, 40) +
+                          (entry.returnValues.description.length > 40
+                            ? "..."
+                            : "")}
                     </h5>
 
                     <h6 style={{ marginTop: 16 }}>
@@ -261,17 +339,38 @@ export default function Activity() {
                     color="#149638"
                     type="bar"
                     stack={{ type: "100%" }}
-                    data={firstSeries}
+                    data={[(modalState.numFor / globals.totalSupply) * 100]}
                   />
                   <ChartSeriesItem
                     color="#DD2E2E"
                     type="bar"
-                    data={secondSeries}
+                    data={[(modalState.numAgainst / globals.totalSupply) * 100]}
                   />
                   <ChartSeriesItem
                     color="lightgray"
                     type="bar"
-                    data={thirdSeries}
+                    data={[
+                      Math.max(
+                        0,
+                        ((modalState.quorum -
+                          (modalState.numFor + modalState.numAgainst)) /
+                          globals.totalSupply) *
+                          100
+                      ),
+                    ]}
+                  />
+                  <ChartSeriesItem
+                    color="#eeeeee"
+                    type="bar"
+                    data={[
+                      (1 -
+                        Math.max(
+                          modalState.numAgainst + modalState.numFor,
+                          modalState.quorum
+                        ) /
+                          globals.totalSupply) *
+                        100,
+                    ]}
                   />
                 </ChartSeries>
               </Chart>
@@ -287,6 +386,9 @@ export default function Activity() {
               <h6 style={{ fontWeight: 600, color: "#282828" }}>
                 Votes until quorum: {modalState.quorum}
               </h6>
+              <h6 style={{ fontWeight: 600, color: "#282828" }}>
+                Block #{modalState.startBlock} - Block #{modalState.endBlock}
+              </h6>
             </div>
 
             <div
@@ -296,47 +398,7 @@ export default function Activity() {
                 paddingTop: 16,
               }}
             >
-              <Button
-                variant="dark"
-                size="lg"
-                style={{
-                  width: 160,
-                  borderRadius: 0,
-                  marginTop: 20,
-                  marginBottom: 20,
-                  marginRight: 8,
-                  backgroundColor: "#149638",
-                  borderWidth: 0,
-                  fontWeight: 600,
-                }}
-                className="hvr-grow"
-                onClick={() => {
-                  vote();
-                }}
-              >
-                Vote For
-              </Button>
-
-              <Button
-                variant="dark"
-                size="lg"
-                style={{
-                  width: 160,
-                  borderRadius: 0,
-                  marginTop: 20,
-                  marginBottom: 20,
-                  marginLeft: 8,
-                  backgroundColor: "#DD2E2E",
-                  borderWidth: 0,
-                  fontWeight: 600,
-                }}
-                className="hvr-grow"
-                // onClick={() => {
-                //     console.log(description)
-                // }}
-              >
-                Vote Against
-              </Button>
+              {conditionalButtons(modalState.state)}
             </div>
           </Modal.Body>
         </Modal>
@@ -344,103 +406,42 @@ export default function Activity() {
     );
   }
 
-  function History() {
-    return (
-      <div style={{ backgroundColor: "red" }}>
-        <div style={{ display: "flex", paddingTop: 16, paddingBottom: 8 }}>
-          <div
-            style={{ flex: 1, backgroundColor: "red" }}
-            onClick={() => handleClick("ongoing")}
-          >
-            <h5 style={{ textAlign: "center" }}>Ongoing proposals</h5>
-          </div>
-          <div style={{ flex: 1 }} onClick={() => handleClick("history")}>
-            <h5 style={{ textAlign: "center" }}>Proposal history</h5>
-          </div>
-        </div>
-        <ul style={{ height: "700px", overflowY: "scroll" }}>
-          {loading &&
-            history.map((user) => (
-              // this is fetching sample data from randomuser.me
-              // replace with our mosaic api/ ipfs etc etc
-              <div
-                style={{
-                  backgroundColor: "#F8F8F8",
-                  marginBottom: 4,
-                  borderStyle: "solid",
-                  borderWidth: 1,
-                  borderColor: "#EAEAEA",
-                  borderRadius: 0,
-                }}
-              >
-                <h7>Image added</h7>
-                <img
-                  className="hvr-grow"
-                  style={{
-                    objectFit: "contain",
-                    height: 80,
-                    width: 80,
-                    padding: 1,
-                  }}
-                  variant="top"
-                  src={user.picture.medium}
-                  alt="item"
-                />
-              </div>
-            ))}
-        </ul>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      {(() => {
-        switch (view) {
-          case "ongoing":
-            return <Ongoing handleClick={handleClick} />;
-          case "history":
-            return <History handleClick={handleClick} />;
-          default:
-            return null;
-        }
-      })()}
-    </div>
-
-    // <div>
-    // <div style={{display: 'flex', paddingTop: 16, paddingBottom: 8}}>
-    //     <div style={{flex: 1}}>
-    //         <h5 style={{textAlign: 'center'}}>
-    //             Ongoing proposals
-    //         </h5>
-    //     </div>
-    //     <div style={{flex: 1}}>
-    //         <h5 style={{textAlign: 'center'}}>
-    //             Mosaic Activity
-    //         </h5>
-    //     </div>
-
-    // </div>
-    // <ul style={{ height: '700px', overflowY: 'scroll'}}>
-    //     {loading &&
-    //     user.map((user)=> (
-    //         // this is fetching sample data from randomuser.me
-    //         // replace with our mosaic api/ ipfs etc etc
-    //         <div style={{backgroundColor: '#F8F8F8', marginBottom: 4, borderStyle: 'solid', borderWidth: 1, borderColor: '#EAEAEA', borderRadius: 0}}>
-    //             <h7>
-    //             Image added
-    //             </h7>
-    //             <img
-    //             className="hvr-grow"
-    //             style={{objectFit: "contain", height: 80, width: 80, padding: 1}}
-    //             variant="top"
-    //             src={user.picture.medium}
-    //             alt="item"
-    //             />
-
-    //         </div>
-    //     ))}
-    // </ul>
-    // </div>
+    <>
+      <div style={{ display: "flex", paddingTop: 0, paddingBottom: 12 }}>
+        <div
+          className="hvr-grow"
+          style={{ flex: 1, cursor: "pointer" }}
+          onClick={() => handleClick("ongoing")}
+        >
+          <h5 style={{ textAlign: "center", fontWeight: 800 }}>
+            Ongoing Proposals
+          </h5>
+        </div>
+        <div
+          className="hvr-grow"
+          style={{ flex: 1, cursor: "pointer" }}
+          onClick={() => handleClick("history")}
+        >
+          <h5 style={{ textAlign: "center", fontWeight: 800 }}>History</h5>
+        </div>
+      </div>
+      <div>
+        {(() => {
+          switch (view) {
+            case "ongoing":
+              return (
+                <ListProposals proposals={ongoing} handleClick={handleClick} />
+              );
+            case "history":
+              return (
+                <ListProposals proposals={history} handleClick={handleClick} />
+              );
+            default:
+              return null;
+          }
+        })()}
+      </div>
+    </>
   );
 }

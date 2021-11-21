@@ -21,11 +21,11 @@
       "function": {
         "daorpc": {
           "deploymentBucketName": "amplify-mosaicdao-dev-130550-deployment",
-          "s3Key": "amplify-builds/daorpc-446b786953636869746c-build.zip"
+          "s3Key": "amplify-builds/daorpc-65524f316e2b4f774459-build.zip"
         },
         "imgrpc": {
           "deploymentBucketName": "amplify-mosaicdao-dev-130550-deployment",
-          "s3Key": "amplify-builds/imgrpc-6e76645079554e796942-build.zip"
+          "s3Key": "amplify-builds/imgrpc-73626847485153426a71-build.zip"
         }
       }
     }

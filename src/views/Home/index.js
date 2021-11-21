@@ -52,7 +52,6 @@ function Home() {
     let images = tup[0].map((e, i) => {
       return { uri: e, id: tup[1][i] };
     });
-    console.log(images);
     try {
       setGallery({
         width: await contracts["MosaicDAO"].methods.galleryWidth().call(),
@@ -195,7 +194,6 @@ function Home() {
           "Add"
         )
         .send();
-      console.log(proposal);
     } else {
     }
   };

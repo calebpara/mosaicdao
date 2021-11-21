@@ -18,7 +18,9 @@ const API_KEY =
 const WALLET_KEY =
   "0x0b2b5ad1a40278a7def9beec3d653115368d76809444fe31834aa7b285504962";
 
-const provider = new Web3.providers.HttpProvider("https://matic-mumbai.chainstacklabs.com");
+const provider = new Web3.providers.HttpProvider(
+  "https://matic-mumbai.chainstacklabs.com"
+);
 
 const networkId = 80001;
 
@@ -84,7 +86,10 @@ app.get("/imgrpc", async function (req, res) {
           }
         );
 
-      const latestVersion = await DAOContract.methods.getGalleryList().call();
+      const latestVersion = (
+        await DAOContract.methods.getGalleryList().call()
+      )[0];
+      console.log(latestVersion);
       const galleryWidth = await DAOContract.methods.galleryWidth().call();
 
       if (arraysEqual(latestVersion, currentVersion)) {

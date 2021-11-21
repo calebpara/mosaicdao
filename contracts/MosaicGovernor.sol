@@ -6,31 +6,34 @@ import "@openzeppelin/contracts/governance/extensions/GovernorProposalThreshold.
 import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
-contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
+contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
 
     event ProposalDetails(uint256 proposalId, uint256 incrementingId, string uri, string action);
 
     uint256 totalProposals = 0; 
+    uint256 _votingPeriod = 1000;
+    uint256 _proposalThreshold = 1e18;
 
-    constructor(ERC20Votes _token, TimelockController timelock)
+    constructor(ERC20Votes _token, uint256 vperiod, uint256 pthreshold)
         Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(10)
-        GovernorTimelockControl(timelock)
-    {}
+    {
+        _votingPeriod = vperiod;
+        _proposalThreshold = pthreshold;
+    }
 
     function votingDelay() public pure override returns (uint256) {
         return 0; // 1 block, 1
     }
 
-    function votingPeriod() public pure override returns (uint256) {
-        return 10; // 1 week, 45818
+    function votingPeriod() public view override returns (uint256) {
+        return _votingPeriod; // 1 week, 45818
     }
 
-    function proposalThreshold() public pure override returns (uint256) {
-        return 1e18;//1e18;
+    function proposalThreshold() public view override returns (uint256) {
+        return _proposalThreshold;//1e18;
     }
 
     // The following functions are overrides required by Solidity.
@@ -55,7 +58,7 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
 
     function propose(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description)
         public
-        override(Governor, GovernorProposalThreshold, IGovernor)
+        override(Governor, GovernorProposalThreshold)
         returns (uint256)
     {
         return 0;
@@ -78,7 +81,7 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
         uint256[] memory values,
         bytes[] memory calldatas,
         bytes32 descriptionHash
-    ) internal virtual override(GovernorTimelockControl, Governor) {
+    ) internal virtual override(Governor) {
         return super._execute(proposalId, targets, values, calldatas, descriptionHash);
     }
 
@@ -87,20 +90,20 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
         uint256[] memory values,
         bytes[] memory calldatas,
         bytes32 descriptionHash
-    ) internal virtual override(GovernorTimelockControl, Governor) returns (uint256) {
+    ) internal virtual override(Governor) returns (uint256) {
         return super._cancel(targets, values, calldatas, descriptionHash);
     }
 
     function _executor()
-    internal view virtual override(GovernorTimelockControl, Governor) returns (address) {
+    internal view virtual override(Governor) returns (address) {
         return super._executor();
     }
 
-    function state(uint256 proposalId) public view virtual override(GovernorTimelockControl, Governor) returns (ProposalState) {
+    function state(uint256 proposalId) public view virtual override(Governor) returns (ProposalState) {
         return super.state(proposalId);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(GovernorTimelockControl, Governor) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(Governor) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }
