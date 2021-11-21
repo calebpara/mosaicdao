@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build server/src && truffle compile",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
-    "@types/web3": "^1.2.2"
+    "@types/web3": "^1.2.2",
+    "truffle": "^5.4.21"
   }
 }
