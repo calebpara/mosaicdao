@@ -39,5 +39,5 @@ module.exports = async (deployer, network, accounts) => {
     "https://bafybeih4ooehbzdomc26uzfswirbsobavftrurveig6hyaqe3upkpnwloe.ipfs.dweb.link/img2.jpg"
   );
 
-  // await mosaicDAO.transferOwnership(mosaicGovernor.address);
+  await mosaicDAO.transferOwnership(mosaicGovernor.address);
 };
