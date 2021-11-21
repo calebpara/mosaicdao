@@ -15,10 +15,10 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
     uint256 _votingPeriod = 1000;
     uint256 _proposalThreshold = 1e18;
 
-    constructor(ERC20Votes _token, uint256 vperiod, uint256 pthreshold)
+    constructor(ERC20Votes _token, uint256 vperiod, uint256 pthreshold, uint256 quorumfrac)
         Governor("MosaicGovernorAlpha")
         GovernorVotes(_token)
-        GovernorVotesQuorumFraction(10)
+        GovernorVotesQuorumFraction(quorumfrac)
     {
         _votingPeriod = vperiod;
         _proposalThreshold = pthreshold;

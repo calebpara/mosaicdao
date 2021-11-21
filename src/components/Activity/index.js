@@ -13,6 +13,7 @@ import UserContext from "../../context/UserContext";
 export default function Activity() {
   const { contracts, account, web3 } = useContext(UserContext);
   const [view, setView] = useState("ongoing");
+  const [updated, setUpdated] = useState(false);
 
   const [modalState, setModalState] = useState({
     image: null,
@@ -29,10 +30,12 @@ export default function Activity() {
   };
 
   useEffect(() => {
+    console.log("called");
     if (contracts["MosaicGovernor"]) {
       populateEvents();
+      setUpdated(true);
     }
-  }, [contracts]);
+  }, [!updated && contracts]);
 
   const [ongoing, setOngoing] = useState([]);
   const [history, setHistory] = useState([]);
@@ -44,7 +47,7 @@ export default function Activity() {
 
   const populateEvents = async () => {
     setLoading(true);
-    const blockNumber = (await web3.eth.getBlockNumber()) - 1;
+    const blockNumber = (await web3.eth.getBlockNumber()) - 2;
     console.log(blockNumber);
     // sample data from randomuser.me
     // replace with our mosaic api/ ipfs etc etc
@@ -55,18 +58,16 @@ export default function Activity() {
       decimals: await contracts["MosaicERC20"].methods.decimals().call(),
     });
 
-    console.log(contracts["MosaicGovernor"]);
-
     let ProposalDetails = await contracts["MosaicGovernor"].getPastEvents(
       "ProposalDetails",
       {
-        fromBlock: 21741190,
+        fromBlock: 1,
       }
     );
     let ProposalCreations = await contracts["MosaicGovernor"].getPastEvents(
       "ProposalCreated",
       {
-        fromBlock: 21741190,
+        fromBlock: 1,
       }
     );
 
@@ -100,26 +101,52 @@ export default function Activity() {
     );
     console.log(Proposals);
 
-    setOngoing(Proposals.filter((proposal) => proposal.state in [0, 1, 4]));
-    setHistory(Proposals.filter((proposal) => proposal.state in [7]));
+    setOngoing(
+      Proposals.filter((proposal) => [0, 1, 4].includes(proposal.state))
+    );
+    setHistory(Proposals.filter((proposal) => [7].includes(proposal.state)));
     setLoading(false);
   };
 
   const vote = async (id, support) => {
     // Execute
-    if (support == -1) {
-      try {
-        await contracts["MosaicGovernor"].methods
-          .execute(id)
-          .send({ from: account });
-      } catch (err) {
-        alert(err.toString());
-      }
-      return;
+
+    try {
+      await contracts["MosaicGovernor"].methods
+        .castVote(id, support)
+        .send({ from: account });
+      window.location.href = "/";
+    } catch (err) {
+      alert(err.toString());
     }
-    await contracts["MosaicGovernor"].methods
-      .castVote(id, support)
-      .send({ from: account });
+  };
+
+  const execute = async (id, description, imgURL) => {
+    try {
+      const transferCalldata = web3.eth.abi.encodeFunctionCall(
+        {
+          name: "appendImage",
+          type: "function",
+          inputs: [
+            {
+              type: "string",
+              name: "uri",
+            },
+          ],
+        },
+        [imgURL]
+      );
+      await contracts["MosaicGovernor"].methods
+        .execute(
+          [contracts["MosaicDAO"].options.address],
+          [0],
+          [transferCalldata],
+          web3.utils.sha3(description)
+        )
+        .send({ from: account });
+    } catch (err) {
+      alert(err.toString());
+    }
   };
 
   const conditionalButtons = (state) => {
@@ -183,13 +210,17 @@ export default function Activity() {
               marginTop: 20,
               marginBottom: 20,
               marginLeft: 8,
-              backgroundColor: "#DD2E2E",
+              backgroundColor: "#1338BE",
               borderWidth: 0,
               fontWeight: 600,
             }}
             className="hvr-grow"
             onClick={() => {
-              vote(modalState.proposalId, -1);
+              execute(
+                modalState.proposalId,
+                modalState.description,
+                modalState.image
+              );
             }}
           >
             Execute
@@ -347,27 +378,11 @@ export default function Activity() {
                     data={[(modalState.numAgainst / globals.totalSupply) * 100]}
                   />
                   <ChartSeriesItem
-                    color="lightgray"
-                    type="bar"
-                    data={[
-                      Math.max(
-                        0,
-                        ((modalState.quorum -
-                          (modalState.numFor + modalState.numAgainst)) /
-                          globals.totalSupply) *
-                          100
-                      ),
-                    ]}
-                  />
-                  <ChartSeriesItem
                     color="#eeeeee"
                     type="bar"
                     data={[
                       (1 -
-                        Math.max(
-                          modalState.numAgainst + modalState.numFor,
-                          modalState.quorum
-                        ) /
+                        (modalState.numAgainst + modalState.numFor) /
                           globals.totalSupply) *
                         100,
                     ]}
@@ -384,7 +399,14 @@ export default function Activity() {
                 Votes against: {modalState.numAgainst}
               </h6>
               <h6 style={{ fontWeight: 600, color: "#282828" }}>
-                Votes until quorum: {modalState.quorum}
+                {modalState.quorum > modalState.numFor + modalState.numAgainst
+                  ? "Votes until quorum: " +
+                    (
+                      modalState.quorum -
+                      modalState.numFor -
+                      modalState.numAgainst
+                    ).toString()
+                  : "Quorum Reached"}
               </h6>
               <h6 style={{ fontWeight: 600, color: "#282828" }}>
                 Block #{modalState.startBlock} - Block #{modalState.endBlock}

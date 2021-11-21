@@ -25,6 +25,7 @@ function App() {
   useEffect(() => {
     (async () => {
       if (window.ethereum.isConnected) onConnect();
+      // if (web3) window.advanceBlock = advanceBlock;
     })();
   }, []);
 
@@ -66,6 +67,26 @@ function App() {
       alert("failed");
     }
   };
+
+  // const advanceBlock = async () => {
+  //   try {
+  //     await web3.currentProvider.send(
+  //       {
+  //         jsonrpc: "2.0",
+  //         method: "evm_mine",
+  //         id: new Date().getTime(),
+  //       },
+  //       (err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //           console.log(result);
+  //         }
+  //       }
+  //     );
+  //   } catch (err) {
+  //     console.log(err.toString());
+  //   }
+  // };
 
   return (
     <UserContext.Provider

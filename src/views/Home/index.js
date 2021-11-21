@@ -11,7 +11,7 @@ import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
 import FormCheck from "react-bootstrap/FormCheck";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-// import { Web3Storage, File } from "web3.storage/dist/bundle.esm.min.js";
+import { Web3Storage, File } from "web3.storage/dist/bundle.esm.min.js";
 import axios from "axios";
 
 function Home() {
@@ -141,12 +141,12 @@ function Home() {
         (await contracts["MosaicERC20"].methods.balanceOf(account).call()) /
           Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
       );
-      
+
     if (contracts["MosaicGovernor"])
-    setMinProposalERC20Balance(
-      (await contracts["MosaicGovernor"].methods.proposalThreshold().call()) /
-        Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
-    );
+      setMinProposalERC20Balance(
+        (await contracts["MosaicGovernor"].methods.proposalThreshold().call()) /
+          Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
+      );
   };
 
   const onRequestAirDrop = async () => {
@@ -159,42 +159,45 @@ function Home() {
   };
 
   const onPropose = async () => {
-    if (showResults == 0) {
-      // TODO: Fix web3.storage related issues
-      // const storageClient = new Web3({ token: API_KEY });
-      // const f = new File([image], "image.png", { type: "image/png" });
-      // const imgURL =
-      //   "https://ipfs.io/ipfs/" +
-      //   (await storageClient.put([f])) +
-      //   "/" +
-      //   fileName;
-      // console.log(imgURL);
-      const imgURL =
-        "https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu";
-      const transferCalldata = web3.eth.abi.encodeFunctionCall(
-        {
-          name: "appendImage",
-          type: "function",
-          inputs: [
-            {
-              type: "string",
-              name: "uri",
-            },
-          ],
-        },
-        [imgURL]
-      );
-      const proposal = await contracts["MosaicGovernor"].methods
-        .proposeWithDetails(
-          [contracts["MosaicDAO"].options.address],
-          [0],
-          [transferCalldata],
-          description,
-          imgURL,
-          "Add"
-        )
-        .send();
-    } else {
+    try {
+      if (showResults == 0) {
+        // TODO: Fix web3.storage related issues
+        const storageClient = new Web3({ token: API_KEY });
+        const f = new File([image], "image.png", { type: "image/png" });
+        const imgURL =
+          "https://ipfs.io/ipfs/" +
+          (await storageClient.put([f])) +
+          "/" +
+          fileName;
+        console.log(imgURL);
+        const transferCalldata = web3.eth.abi.encodeFunctionCall(
+          {
+            name: "appendImage",
+            type: "function",
+            inputs: [
+              {
+                type: "string",
+                name: "uri",
+              },
+            ],
+          },
+          [imgURL]
+        );
+        const proposal = await contracts["MosaicGovernor"].methods
+          .proposeWithDetails(
+            [contracts["MosaicDAO"].options.address],
+            [0],
+            [transferCalldata],
+            description,
+            imgURL,
+            "Add"
+          )
+          .send();
+        window.location.href = "/";
+      } else {
+      }
+    } catch (err) {
+      alert(err.toString());
     }
   };
 

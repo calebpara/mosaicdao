@@ -18,11 +18,14 @@ const API_KEY =
 const WALLET_KEY =
   "0x0b2b5ad1a40278a7def9beec3d653115368d76809444fe31834aa7b285504962";
 
-const provider = new Web3.providers.HttpProvider(
-  "https://matic-mumbai.chainstacklabs.com"
-);
+const networks = [
+  { provider: "http://localhost:7545", networkId: 5777 },
+  { provider: "http://localhost:8545", networkId: 1338 },
+  { provider: "https://matic-mumbai.chainstacklabs.com", networkId: 80001 },
+];
+const provider = new Web3.providers.HttpProvider(networks[1].provider);
 
-const networkId = 80001;
+const networkId = networks[1].networkId;
 
 const web3 = new Web3(provider);
 

@@ -30,8 +30,9 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(
     MosaicGovernor,
     erc20.address,
-    40000,
-    new Web3.utils.BN("100000000000000000000")
+    4,
+    new Web3.utils.BN("100000000000000000000"),
+    10
   );
   let mosaicGovernor = await MosaicGovernor.deployed();
 
