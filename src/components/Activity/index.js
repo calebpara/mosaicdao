@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useContext } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
@@ -8,11 +8,12 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
+import UserContext from "../../context/UserContext";
 
 const [firstSeries, secondSeries, thirdSeries] = [[1], [5], [2]];
 
 export default function Activity() {
-  const { contracts } = useContext(UserContext);
+  const { contracts, account } = useContext(UserContext);
   const [view, setView] = useState("ongoing");
 
   const [modalState, setModalState] = useState({
@@ -38,12 +39,21 @@ export default function Activity() {
   const [ongoing, setOngoing] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [globals, setGlobals] = useState({
+    totalSupply: 1,
+  });
 
   const populateEvents = async () => {
     try {
       // sample data from randomuser.me
       // replace with our mosaic api/ ipfs etc etc
       const res = await axios.get("https://randomuser.me/api/?results=50");
+
+      setGlobals({
+        totalSupply: await contracts["MosaicERC20"].methods
+          .totalSupply()
+          .call(),
+      });
 
       let ProposalDetails = await contracts["MosaicGovernor"].getPastEvents(
         "ProposalDetails",
@@ -58,14 +68,45 @@ export default function Activity() {
         }
       );
 
-      let Proposals = ProposalCreations.map((obj, i) =>
-        Object.assign({}, obj, ProposalDetails[i].returnValues)
-      );
+      let Proposals = await ProposalCreations.map(async (obj, i) => {
+        let dict = Object.assign({}, obj, ProposalDetails[i].returnValues);
+        console.log(numFor);
+
+        let numFor = (
+          await contracts["MosaicGovernor"].getPastEvents("VoteCast", {
+            fromBlock: dict.returnValues.startBlock,
+            toBlock: dict.returnValues.endBlock,
+            proposalId: dict.proposalId,
+            support: 0,
+          })
+        ).reduce((a, b) => a + b.returnValues.weight, 0);
+
+        let numAgainst = (
+          await contracts["MosaicGovernor"].getPastEvents("VoteCast", {
+            fromBlock: dict.returnValues.startBlock,
+            toBlock: dict.returnValues.endBlock,
+            proposalId: dict.proposalId,
+            support: 1,
+          })
+        ).reduce((a, b) => a + b.returnValues.weight, 0);
+
+        dict["numFor"] = numFor;
+        dict["numAgainst"] = numAgainst;
+        dict["quorum"] = await contracts["MosaicGovernor"].methods
+          .quorum(dict.returnValues.endBlock)
+          .call();
+
+        return dict;
+      });
       setOngoing(Proposals);
       setLoading(true);
     } catch (err) {
       alert(err.message);
     }
+  };
+
+  const vote = async (id, support) => {
+    await contracts["MosaicGovernor"].castVote(id, support, { from: account });
   };
 
   function Ongoing() {
@@ -93,7 +134,7 @@ export default function Activity() {
             </div>
           </div>
           <ul style={{ height: "700px", overflowY: "scroll" }}>
-            {loading &&
+            {ongoing &&
               ongoing.map((entry) => (
                 // this is fetching sample data from randomuser.me
                 // replace with our mosaic api/ ipfs etc etc
@@ -114,19 +155,22 @@ export default function Activity() {
                     justifyContent: "space-between",
                     cursor: "pointer",
                   }}
-                  onClick={() => {
-                    setModal(true);
+                  onClick={async () => {
                     setModalState({
                       image: entry.uri,
-                      votes: entry.incrementingId,
                       address: entry.returnValues.proposer,
                       number: entry.incrementingId,
+                      description: entry.returnValues.description,
+                      numFor: entry.numFor,
+                      numAgainst: entry.numAgainst,
+                      quorum: entry.quorum,
                     });
+                    setModal(true);
                   }}
                 >
                   <div>
                     <h8 style={{ fontWeight: 600, color: "#8A8A8A" }}>
-                      #{entry.incrementingId}
+                      #{entry.incrementingId} - {entry.action}
                     </h8>
 
                     {/* <h8 style={{fontWeight: 400, color: '#38A0FF', paddingLeft: 8}}>
@@ -138,11 +182,14 @@ export default function Activity() {
                         </h8> */}
 
                     <h5 style={{ marginTop: 4 }}>
-                      {entry.returnValues.description}
+                      {entry.returnValues.description.substr(0, 40) +
+                        (entry.returnValues.description.length > 40
+                          ? "..."
+                          : "")}
                     </h5>
 
                     <h6 style={{ marginTop: 16 }}>
-                      Votes: {entry.incrementingId}
+                      {/* Votes: {numFor + numAgainst} */}
                     </h6>
                   </div>
                   <div>
@@ -175,7 +222,7 @@ export default function Activity() {
           <Modal.Header closeButton>
             <Modal.Title id="example-modal-sizes-title-lg">
               <h6>
-                Propsal #{modalState.number} by 0x{modalState.address}
+                Proposal #{modalState.number} by 0x{modalState.address}
               </h6>
               <h5 style={{ fontWeight: 600 }}>Add Image</h5>
             </Modal.Title>
@@ -203,12 +250,7 @@ export default function Activity() {
             </div>
 
             <div style={{ marginTop: 16 }}>
-              <h6 style={{ fontWeight: 500 }}>
-                Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum
-                ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum
-                Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum
-                ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum
-              </h6>
+              <h6 style={{ fontWeight: 500 }}>{modalState.description}</h6>
             </div>
 
             <div style={{ marginTop: 40 }}>
@@ -237,13 +279,13 @@ export default function Activity() {
 
             <div>
               <h6 style={{ fontWeight: 600, color: "#149638" }}>
-                Votes for: 1234replaceme
+                Votes for: {modalState.numFor}
               </h6>
               <h6 style={{ fontWeight: 600, color: "#DD2E2E" }}>
-                Votes against: 1234replaceme
+                Votes against: {modalState.numAgainst}
               </h6>
               <h6 style={{ fontWeight: 600, color: "#282828" }}>
-                Votes until quorum: 1234replaceme
+                Votes until quorum: {modalState.quorum}
               </h6>
             </div>
 
@@ -268,9 +310,9 @@ export default function Activity() {
                   fontWeight: 600,
                 }}
                 className="hvr-grow"
-                // onClick={() => {
-                //     console.log(description)
-                // }}
+                onClick={() => {
+                  vote();
+                }}
               >
                 Vote For
               </Button>
@@ -295,15 +337,6 @@ export default function Activity() {
               >
                 Vote Against
               </Button>
-            </div>
-
-            <div style={{ marginTop: 40 }}>
-              <h5 style={{ fontWeight: 800 }}>Should this image be added?</h5>
-            </div>
-
-            <div style={{ marginTop: 16 }}>
-              <h6 style={{ fontWeight: 600 }}>Votes for</h6>
-              <h6 style={{ fontWeight: 600 }}>Votes against</h6>
             </div>
           </Modal.Body>
         </Modal>

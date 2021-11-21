@@ -17,14 +17,14 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(
     TokenAirDrop,
     erc20.address,
-    new Web3.utils.BN("10000000000000000") // 0.01 MOSAIC
+    new Web3.utils.BN("1000000000000000000000") // 100 MOSAIC
   );
   const tokenAirDrop = await TokenAirDrop.deployed();
 
   // Approve airdrop to transfer funds to requestors
   await erc20.approve(
     tokenAirDrop.address,
-    new Web3.utils.BN("1000000000000000000000") // 100 MOSAIC
+    new Web3.utils.BN("10000000000000000000000") // 1000 MOSAIC
   );
 
   await deployer.deploy(MosaicGovernor, erc20.address, timelock.address);
@@ -64,6 +64,4 @@ module.exports = async (deployer, network, accounts) => {
     "https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu",
     "Add"
   );
-
-  console.log(await mosaicGovernor.getPastEvents("ProposalCreated"));
 };

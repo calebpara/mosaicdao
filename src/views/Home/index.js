@@ -32,12 +32,14 @@ function Home() {
 
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageLabel, setImageLabel] = useState("");
   const [removeIndex, setRemoveIndex] = useState(-1);
   const [description, setDescription] = useState("");
   const [gallery, setGallery] = useState({ width: 0, images: [] });
 
   const { contracts, account, web3 } = useContext(UserContext);
   const [userERC20Balance, setUserERC20Balance] = useState(0.0);
+  const [minProposalERC20Balance, setMinProposalERC20Balance] = useState(0.0);
 
   useEffect(() => {
     if (contracts["MosaicDAO"]) populateGallery();
@@ -62,7 +64,8 @@ function Home() {
     }
   };
 
-  const uploadFile = (input) => {
+  const uploadFile = (e) => {
+    let input = e.target;
     var reader;
 
     if (input.files && input.files[0]) {
@@ -95,7 +98,10 @@ function Home() {
                   objectFit: "contain",
                   height: 100,
                   width: 100,
-                  padding: 1,
+                  padding: selectedImage == image.id ? 0 : 1,
+                  borderStyle: "solid",
+                  borderWidth: selectedImage == image.id ? 2 : 0,
+                  borderColor: "black",
                 }}
                 variant="top"
                 src={image.uri}
@@ -118,7 +124,7 @@ function Home() {
 
   const Add = () => (
     <>
-      <Form.Group controlId="formFile" style={{ marginTop: 16 }}>
+      <Form.Group controlId="exampleForm.formFile" style={{ marginTop: 16 }}>
         <Form.Label>Choose an image (must be 256x256 pixels)</Form.Label>
         <Form.Control type="file" />
       </Form.Group>
@@ -136,6 +142,12 @@ function Home() {
         (await contracts["MosaicERC20"].methods.balanceOf(account).call()) /
           Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
       );
+      
+    if (contracts["MosaicGovernor"])
+    setMinProposalERC20Balance(
+      (await contracts["MosaicGovernor"].methods.proposalThreshold().call()) /
+        Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
+    );
   };
 
   const onRequestAirDrop = async () => {
@@ -173,16 +185,16 @@ function Home() {
         },
         [imgURL]
       );
-      const proposal = await contracts[
-        "MosaicGovernor"
-      ].methods.proposeWithDetails(
-        [contracts["MosaicDAO"].options.address],
-        [0],
-        [transferCalldata],
-        "Add the bathroom stall art to the gallery",
-        imgURL,
-        "Add"
-      );
+      const proposal = await contracts["MosaicGovernor"].methods
+        .proposeWithDetails(
+          [contracts["MosaicDAO"].options.address],
+          [0],
+          [transferCalldata],
+          description,
+          imgURL,
+          "Add"
+        )
+        .send();
       console.log(proposal);
     } else {
     }
@@ -275,7 +287,7 @@ function Home() {
           <div>{showResults == 0 ? <Add /> : <Remove />}</div>
 
           <div style={{ marginTop: 40 }}>
-            <h5 style={{ fontWeight: 800 }}>Propsal Description:</h5>
+            <h5 style={{ fontWeight: 800 }}>Proposal Description:</h5>
           </div>
 
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -300,8 +312,13 @@ function Home() {
               }}
               className="hvr-grow"
               onClick={onPropose}
+              disabled={userERC20Balance < minProposalERC20Balance}
             >
-              Submit Proposal
+              {userERC20Balance < minProposalERC20Balance
+                ? "Insufficient Tokens (" +
+                  minProposalERC20Balance.toString() +
+                  ")"
+                : "Submit Proposal"}
             </Button>
           </div>
         </Modal.Body>
