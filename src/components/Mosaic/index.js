@@ -49,6 +49,9 @@ export default function Mosaic() {
               objectFit: "contain", 
               height: '100%', 
               width: '100%', 
+              borderStyle: 'solid',
+              borderWidth: 2,
+              borderColor: 'black',
             }}
           />
         </div>

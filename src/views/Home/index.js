@@ -210,10 +210,12 @@ function Home() {
             style={{
               height: "auto",
               width: 400,
+              marginTop: 32,
             }}
           />
-          <h4 style={{ textAlign: "center", paddingTop: 32 }}>
-            We're redefining collaborative art curation.
+          {/* <h1 style={{textAlign: 'center', paddingTop: 32, fontWeight: 900}}>MosaicDAO</h1> */}
+          <h4 style={{ textAlign: "center", paddingTop: 16 }}>
+            Collaborative art curation, redefined.
           </h4>
           <Button
             variant="dark"
@@ -239,9 +241,11 @@ function Home() {
 
         <Row
           style={{
-            paddingBottom: "6vh",
+            paddingBottom: "4vh",
+            paddingTop: "4vh",
             alignItems: "center",
             justifyContent: "center",
+            backgroundColor: "#EEF1F4",
           }}
         >
           <h7 style={{ textAlign: "center", fontWeight: 800 }}>

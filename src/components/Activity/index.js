@@ -1,8 +1,15 @@
-import React, { useState, useEffect, Fragment, useContext } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import UserContext from "../../context/UserContext";
+import {
+  Chart,
+  ChartSeries,
+  ChartSeriesItem,
+} from "@progress/kendo-react-charts";
+import "hammerjs";
+
+const [firstSeries, secondSeries, thirdSeries] = [[1], [5], [2]];
 
 export default function Activity() {
   const { contracts } = useContext(UserContext);
@@ -24,7 +31,7 @@ export default function Activity() {
 
   useEffect(() => {
     if (contracts["MosaicGovernor"]) {
-      populateEvents(); 
+      populateEvents();
     }
   }, [contracts]);
 
@@ -61,12 +68,11 @@ export default function Activity() {
     }
   };
 
-
   function Ongoing() {
     return (
       <>
         <div>
-          <div style={{ display: "flex", paddingTop: 0, paddingBottom: 8 }}>
+          <div style={{ display: "flex", paddingTop: 0, paddingBottom: 12 }}>
             <div
               className="hvr-grow"
               style={{ flex: 1, cursor: "pointer" }}
@@ -185,7 +191,7 @@ export default function Activity() {
             >
               <img
                 objectFit="cover"
-                style={{ height: "auto", width: 360, padding: 1, resize: "" }}
+                style={{ height: "auto", width: 320, padding: 1, resize: "" }}
                 variant="top"
                 src={modalState.image}
                 alt="item"
@@ -203,6 +209,92 @@ export default function Activity() {
                 Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum
                 ipsum ipsum Lorem ipsum ipsum ipsum Lorem ipsum ipsum ipsum
               </h6>
+            </div>
+
+            <div style={{ marginTop: 40 }}>
+              <h5 style={{ fontWeight: 800 }}>Should this image be added?</h5>
+              <Chart>
+                <ChartSeries>
+                  <ChartSeriesItem
+                    color="#149638"
+                    type="bar"
+                    stack={{ type: "100%" }}
+                    data={firstSeries}
+                  />
+                  <ChartSeriesItem
+                    color="#DD2E2E"
+                    type="bar"
+                    data={secondSeries}
+                  />
+                  <ChartSeriesItem
+                    color="lightgray"
+                    type="bar"
+                    data={thirdSeries}
+                  />
+                </ChartSeries>
+              </Chart>
+            </div>
+
+            <div>
+              <h6 style={{ fontWeight: 600, color: "#149638" }}>
+                Votes for: 1234replaceme
+              </h6>
+              <h6 style={{ fontWeight: 600, color: "#DD2E2E" }}>
+                Votes against: 1234replaceme
+              </h6>
+              <h6 style={{ fontWeight: 600, color: "#282828" }}>
+                Votes until quorum: 1234replaceme
+              </h6>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                paddingTop: 16,
+              }}
+            >
+              <Button
+                variant="dark"
+                size="lg"
+                style={{
+                  width: 160,
+                  borderRadius: 0,
+                  marginTop: 20,
+                  marginBottom: 20,
+                  marginRight: 8,
+                  backgroundColor: "#149638",
+                  borderWidth: 0,
+                  fontWeight: 600,
+                }}
+                className="hvr-grow"
+                // onClick={() => {
+                //     console.log(description)
+                // }}
+              >
+                Vote For
+              </Button>
+
+              <Button
+                variant="dark"
+                size="lg"
+                style={{
+                  width: 160,
+                  borderRadius: 0,
+                  marginTop: 20,
+                  marginBottom: 20,
+                  marginLeft: 8,
+                  backgroundColor: "#DD2E2E",
+                  borderWidth: 0,
+                  fontWeight: 600,
+                }}
+                className="hvr-grow"
+                // onClick={() => {
+                //     console.log(description)
+                // }}
+              >
+                Vote Against
+              </Button>
             </div>
 
             <div style={{ marginTop: 40 }}>
