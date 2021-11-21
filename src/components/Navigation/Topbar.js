@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: "32px",
-    backgroundColor: 'white',
+    backgroundColor: '#EEF1F4',
     borderBottomColor: '#E5E5E5',
     borderBottomWidth: 1,
     borderBottomStyle: 'solid',
@@ -86,7 +86,7 @@ export default function Topbar({ onConnect }) {
 
           <div className={classes.spacer}></div>
 
-          <a className="hvr-grow">
+          {/* <a className="hvr-grow">
           <img
             src={twitter}
             alt="twitter"
@@ -112,8 +112,8 @@ export default function Topbar({ onConnect }) {
               marginBottom: 5,
             }}
           />
-
-          </a>
+          </a> */}
+          
           {account ? (
             <Button color="dark" variant="contained" disabled>
               {account.substr(0, 10) + "..."}

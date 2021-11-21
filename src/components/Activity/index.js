@@ -54,7 +54,7 @@ export default function Activity() {
         return(
         <>
         <div>
-        <div style={{display: 'flex', paddingTop: 0, paddingBottom: 8}}>
+        <div style={{display: 'flex', paddingTop: 0, paddingBottom: 12}}>
             <div className="hvr-grow" style={{flex: 1, cursor: 'pointer'}}
             onClick={() => handleClick('ongoing')}
             >

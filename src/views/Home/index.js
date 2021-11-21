@@ -5,7 +5,7 @@ import Mosaic from '../../components/Mosaic';
 import {Container} from 'react-bootstrap'
 import {Col, Row, Button} from 'react-bootstrap'
 import Activity from '../../components/Activity';
-import logo from '../../assets/images/moslogo.png'
+import logo from '../../assets/images/colorlogo.png'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
@@ -100,7 +100,6 @@ function Home() {
     <Form.Label>Choose an image (must be 256x256 pixels)</Form.Label>
     <Form.Control type="file" />
     </Form.Group>
-
     </>
   )
 
@@ -138,15 +137,16 @@ function Home() {
         </Button> */}
 
         <Row style={{ paddingBottom: '6vh', alignItems: 'center', justifyContent: 'center'}}>
-        {/* <img
+        <img
             src={logo}
             alt="logo"
             style={{
               height: 'auto', 
               width: 400, 
+              marginTop: 32
             }}
-          /> */}
-          <h1 style={{textAlign: 'center', paddingTop: 32, fontWeight: 900}}>MosaicDAO</h1>
+          />
+          {/* <h1 style={{textAlign: 'center', paddingTop: 32, fontWeight: 900}}>MosaicDAO</h1> */}
           <h4 style={{textAlign: 'center', paddingTop: 16}}>Collaborative art curation, redefined.</h4>
         <Button 
         variant="dark" 
@@ -168,10 +168,9 @@ function Home() {
           <Col sm={{span: 4, order: 1}} style={{paddingTop: '6vh'}}>
           <Activity />
           </Col>
-          
         </Row>
 
-        <Row style={{ paddingBottom: '6vh', alignItems: 'center', justifyContent: 'center'}}>
+        <Row style={{ paddingBottom: '4vh', paddingTop: '4vh', alignItems: 'center', justifyContent: 'center', backgroundColor: '#EEF1F4'}}>
           <h7 style={{textAlign: 'center', fontWeight: 800}}>@2021 MosaicDAO</h7>
         </Row>
     </Container>
