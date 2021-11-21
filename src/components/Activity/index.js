@@ -170,7 +170,7 @@ export default function Activity() {
             <h5 style={{fontWeight: 800}}>Should this image be added?</h5>
             <Chart>
                 <ChartSeries>
-                    <ChartSeriesItem color="#149638" type="bar" stack={{ type: '100%' }} data={firstSeries} style={{backgroundColor: '#149638'}} />
+                    <ChartSeriesItem color="#149638" type="bar" stack={{ type: '100%' }} data={firstSeries} />
                     <ChartSeriesItem color="#DD2E2E" type="bar" data={secondSeries} />
                     <ChartSeriesItem color="lightgray" type="bar" data={thirdSeries} />
                 </ChartSeries>
