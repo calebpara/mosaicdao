@@ -9,6 +9,7 @@ const { Canvas, Image } = require("canvas");
 const atob = require("atob");
 const app = express();
 
+
 const MosaicDAO = require("./MosaicDAO.json");
 
 var currentVersion = [];
@@ -168,4 +169,6 @@ app.get("/", async function (req, res) {
   }
 });
 
-app.listen(3001, function () {});
+const PORT = 3001
+app.listen(PORT, function () {});
+console.log(`server running on port ${PORT}`);
