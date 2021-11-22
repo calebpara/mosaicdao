@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { Route, Redirect, Routes } from "react-router-dom";
 import { Home } from "./views";
-import getWeb3 from "./getWeb3";
+import { getWeb3, switchToMumbai } from "./getWeb3";
 import Topbar from "./components/Navigation/Topbar";
 import { useEffect, useState } from "react";
 import UserContext from "./context/UserContext";
@@ -25,15 +25,23 @@ function App() {
   useEffect(() => {
     (async () => {
       if (window.ethereum.isConnected) onConnect();
-      // if (web3) window.advanceBlock = advanceBlock;
     })();
   }, []);
 
+  useEffect(() => {
+    if (contracts["MosaicERC20"]) window.advanceBlock = advanceBlock;
+  }, [!window.advanceBlock && contracts["MosaicERC20"]]);
+
   const onConnect = async () => {
     try {
-      const web3 = await getWeb3();
+      let web3 = await getWeb3();
       const account = (await web3.eth.getAccounts())[0];
-      const networkId = await web3.eth.net.getId();
+      let networkId = await web3.eth.net.getId();
+
+      if (networkId != 80001) {
+        await switchToMumbai();
+        return;
+      }
 
       setWeb3(web3);
       setAccount(account);
@@ -68,25 +76,19 @@ function App() {
     }
   };
 
-  // const advanceBlock = async () => {
-  //   try {
-  //     await web3.currentProvider.send(
-  //       {
-  //         jsonrpc: "2.0",
-  //         method: "evm_mine",
-  //         id: new Date().getTime(),
-  //       },
-  //       (err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //           console.log(result);
-  //         }
-  //       }
-  //     );
-  //   } catch (err) {
-  //     console.log(err.toString());
-  //   }
-  // };
+  const advanceBlock = async (repeat = 1) => {
+    try {
+      for (; repeat > 0; repeat--) {
+        await contracts["MosaicERC20"].methods
+          .transfer("0x95b4A71dBF0160D936350c1fFB55049580a25288", 1)
+          .send();
+        const blockNumber = await web3.eth.getBlockNumber();
+        console.log(blockNumber);
+      }
+    } catch (err) {
+      console.log(err.toString());
+    }
+  };
 
   return (
     <UserContext.Provider

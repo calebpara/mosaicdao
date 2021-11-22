@@ -1,6 +1,6 @@
 import Web3 from "web3";
 
-const getWeb3 = async () => {
+export const getWeb3 = async () => {
   // Modern dapp browsers...
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
@@ -27,4 +27,32 @@ const getWeb3 = async () => {
   }
 };
 
-export default getWeb3;
+export const switchToMumbai = async () => {
+  let switchToMumbai = [
+    {
+      chainId: "0x13881",
+      chainName: "Mumbai Testnet",
+      rpcUrls: ["https://rpc-mumbai.matic.today"],
+      nativeCurrency: {
+        name: "MATIC",
+        symbol: "MATIC",
+        decimals: 18,
+      },
+    },
+  ];
+  // Modern dapp browsers...
+  if (window.ethereum) {
+    try {
+      console.log("switch to MATIC blockchain");
+      window.ethereum
+        .request({
+          method: "wallet_addEthereumChain",
+          params: switchToMumbai,
+        })
+        .catch((error) => console.log(error.message));
+      console.log("finished switching to MATIC (POLYGON)");
+    } catch (error) {
+      alert("Failed to switch to MATIC");
+    }
+  }
+};

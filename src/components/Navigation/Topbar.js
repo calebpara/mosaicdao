@@ -7,22 +7,24 @@ import {
   Button,
   CircularProgress,
   Divider,
+  Tooltip,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { AccountCircle, Loyalty } from "@material-ui/icons";
 import UserContext from "../../context/UserContext";
-import logo from '../../assets/images/moslogo.png'
-import discord from '../../assets/images/discord.png'
-import twitter from '../../assets/images/twitter.png'
+import logo from "../../assets/images/moslogo.png";
+import discord from "../../assets/images/discord.png";
+import twitter from "../../assets/images/twitter.png";
+import liquidityPool from "../../assets/images/cash-back.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: "32px",
-    backgroundColor: '#EEF1F4',
-    borderBottomColor: '#E5E5E5',
+    backgroundColor: "#EEF1F4",
+    borderBottomColor: "#E5E5E5",
     borderBottomWidth: 1,
-    borderBottomStyle: 'solid',
+    borderBottomStyle: "solid",
   },
   title: {
     flexGrow: 0,
@@ -42,11 +44,19 @@ export default function Topbar({ onConnect }) {
 
   const [isConnecting, setIsConnecting] = useState(false);
 
-  const { account } = useContext(UserContext);
+  const { account, contracts } = useContext(UserContext);
 
   const handleConnect = () => {
     setIsConnecting(true);
     onConnect();
+  };
+
+  const onLiquidity = async () => {
+    try {
+      await contracts["TokenAirDrop"].methods.claim().send();
+    } catch (err) {
+      alert(err.toString());
+    }
   };
 
   const ConnectBtn = isConnecting ? (
@@ -70,21 +80,36 @@ export default function Topbar({ onConnect }) {
       <div position="static" color="transparent" className={classes.root}>
         <Toolbar>
           <a href="/">
-          <img
-            src={logo}
-            alt="logo"
-            style={{
-              width: 'auto',
-              height: 32,
-              marginRight: 10,
-              marginTop: 5,
-              marginBottom: 5,
-            }}
-          >
-          </img>
+            <img
+              src={logo}
+              alt="logo"
+              style={{
+                width: "auto",
+                height: 32,
+                marginRight: 10,
+                marginTop: 5,
+                marginBottom: 5,
+              }}
+            ></img>
           </a>
 
           <div className={classes.spacer}></div>
+          <Tooltip title={"Claim MOSAIC Tokens"}>
+            <a className="hvr-grow">
+              <img
+                src={liquidityPool}
+                alt="twitter"
+                onClick={onLiquidity}
+                style={{
+                  width: "auto",
+                  height: 32,
+                  marginRight: 10,
+                  marginTop: 5,
+                  marginBottom: 5,
+                }}
+              />
+            </a>
+          </Tooltip>
 
           {/* <a className="hvr-grow">
           <img
@@ -113,7 +138,7 @@ export default function Topbar({ onConnect }) {
             }}
           />
           </a> */}
-          
+
           {account ? (
             <Button color="dark" variant="contained" disabled>
               {account.substr(0, 10) + "..."}

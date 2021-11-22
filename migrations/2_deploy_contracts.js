@@ -13,38 +13,31 @@ module.exports = async (deployer, network, accounts) => {
 
   await deployer.deploy(MosaicERC20);
   const erc20 = await MosaicERC20.deployed();
-
+  console.log(network);
   await deployer.deploy(
     TokenAirDrop,
     erc20.address,
-    new Web3.utils.BN("1000000000000000000000") // 100 MOSAIC
+    new Web3.utils.BN("10000000000000000000") // 10 MOSAIC
   );
   const tokenAirDrop = await TokenAirDrop.deployed();
 
   // Approve airdrop to transfer funds to requestors
   await erc20.approve(
     tokenAirDrop.address,
-    new Web3.utils.BN("10000000000000000000000") // 1000 MOSAIC
+    new Web3.utils.BN("1000000000000000000000") // 1000 MOSAIC
   );
 
   await deployer.deploy(
     MosaicGovernor,
     erc20.address,
-    4,
-    new Web3.utils.BN("100000000000000000000"),
-    10
+    network == "mumbai" ? 40000 : 5,
+    new Web3.utils.BN("5000000000000000000"), // 5 MOSAIC
+    3
   );
   let mosaicGovernor = await MosaicGovernor.deployed();
 
   await deployer.deploy(MosaicDAO, 5);
   let mosaicDAO = await MosaicDAO.deployed();
-
-  await mosaicDAO.appendImage(
-    "https://bafybeiau2675bek3hsschrxqn43ohuygj42sqsjzqvv3q4ksknfrqphdsa.ipfs.dweb.link/img1.jpg"
-  );
-  await mosaicDAO.appendImage(
-    "https://bafybeih4ooehbzdomc26uzfswirbsobavftrurveig6hyaqe3upkpnwloe.ipfs.dweb.link/img2.jpg"
-  );
 
   await mosaicDAO.transferOwnership(mosaicGovernor.address);
 
@@ -60,14 +53,5 @@ module.exports = async (deployer, network, accounts) => {
       ],
     },
     ["https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu"]
-  );
-
-  const proposal = await mosaicGovernor.proposeWithDetails(
-    [MosaicDAO.address],
-    [0],
-    [transferCalldata],
-    "Add the bathroom stall art to the gallery",
-    "https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu",
-    "Add"
   );
 };

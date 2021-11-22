@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFractio
 
 contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
 
-    event ProposalDetails(uint256 proposalId, uint256 incrementingId, string uri, string action);
+    event ProposalDetails(uint256 proposalId, uint256 incrementingId, string uri, uint256 imageIndex, string action);
 
     uint256 totalProposals = 0; 
     uint256 _votingPeriod = 1000;
@@ -65,12 +65,12 @@ contract MosaicGovernor is GovernorProposalThreshold, GovernorCountingSimple, Go
     }
 
     // This is a temporary unsafe implementation 
-    function proposeWithDetails(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description, string memory uri, string memory action)
+    function proposeWithDetails(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description, string memory uri, uint256 imageIndex, string memory action)
         public
         returns (uint256 proposalId)
     {
         proposalId = super.propose(targets, values, calldatas, description);
-        emit ProposalDetails(proposalId, totalProposals, uri, action); 
+        emit ProposalDetails(proposalId, totalProposals, uri, imageIndex, action); 
         totalProposals += 1; 
     }
 

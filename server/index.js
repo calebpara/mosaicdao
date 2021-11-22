@@ -23,9 +23,9 @@ const networks = [
   { provider: "http://localhost:8545", networkId: 1338 },
   { provider: "https://matic-mumbai.chainstacklabs.com", networkId: 80001 },
 ];
-const provider = new Web3.providers.HttpProvider(networks[1].provider);
+const provider = new Web3.providers.HttpProvider(networks[2].provider);
 
-const networkId = networks[1].networkId;
+const networkId = networks[2].networkId;
 
 const web3 = new Web3(provider);
 
@@ -76,7 +76,7 @@ app.use(function (req, res, next) {
 });
 
 app.get("/imgrpc", async function (req, res) {
-  if (req.query.update) {
+  if (req.query.update || imgURL == "") {
     try {
       // compare latest version with current version
 
@@ -159,13 +159,10 @@ app.get("/imgrpc", async function (req, res) {
       return;
     }
   }
-  if (imgURL == "") {
-    res.status(400).send("no picture uploaded");
-  } else {
-    (
-      await axios({ method: "get", url: imgURL, responseType: "stream" })
-    ).data.pipe(res);
-  }
+
+  (
+    await axios({ method: "get", url: imgURL, responseType: "stream" })
+  ).data.pipe(res);
 });
 var port = process.env.PORT || 3000;
 

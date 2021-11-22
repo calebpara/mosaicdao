@@ -9,6 +9,8 @@ import {
 } from "@progress/kendo-react-charts";
 import "hammerjs";
 import UserContext from "../../context/UserContext";
+import { IMGRPC_ENDPOINT } from "../../api/constants";
+import Loader from "../Loader/index.js";
 
 export default function Activity() {
   const { contracts, account, web3 } = useContext(UserContext);
@@ -30,12 +32,9 @@ export default function Activity() {
   };
 
   useEffect(() => {
-    console.log("called");
-    if (contracts["MosaicGovernor"]) {
-      populateEvents();
-      setUpdated(true);
-    }
-  }, [!updated && contracts]);
+    console.log(contracts);
+    if (contracts["MosaicERC20"]) populateEvents();
+  }, [contracts]);
 
   const [ongoing, setOngoing] = useState([]);
   const [history, setHistory] = useState([]);
@@ -61,13 +60,13 @@ export default function Activity() {
     let ProposalDetails = await contracts["MosaicGovernor"].getPastEvents(
       "ProposalDetails",
       {
-        fromBlock: 1,
+        fromBlock: 21756000,
       }
     );
     let ProposalCreations = await contracts["MosaicGovernor"].getPastEvents(
       "ProposalCreated",
       {
-        fromBlock: 1,
+        fromBlock: 21756000,
       }
     );
 
@@ -121,21 +120,39 @@ export default function Activity() {
     }
   };
 
-  const execute = async (id, description, imgURL) => {
+  const execute = async (id, description, imgURL, imgIndex, action) => {
     try {
-      const transferCalldata = web3.eth.abi.encodeFunctionCall(
-        {
-          name: "appendImage",
-          type: "function",
-          inputs: [
-            {
-              type: "string",
-              name: "uri",
-            },
-          ],
-        },
-        [imgURL]
-      );
+      let transferCalldata;
+      if (action == "Add") {
+        transferCalldata = web3.eth.abi.encodeFunctionCall(
+          {
+            name: "appendImage",
+            type: "function",
+            inputs: [
+              {
+                type: "string",
+                name: "uri",
+              },
+            ],
+          },
+          [imgURL]
+        );
+      } else if (action == "Remove") {
+        transferCalldata = web3.eth.abi.encodeFunctionCall(
+          {
+            name: "removeImage",
+            type: "function",
+            inputs: [
+              {
+                type: "uint256",
+                name: "index",
+              },
+            ],
+          },
+          [imgIndex]
+        );
+      }
+
       await contracts["MosaicGovernor"].methods
         .execute(
           [contracts["MosaicDAO"].options.address],
@@ -144,10 +161,18 @@ export default function Activity() {
           web3.utils.sha3(description)
         )
         .send({ from: account });
+
+      await axios.get(IMGRPC_ENDPOINT, { params: { update: 1 } });
+      await sleep(3000);
+      window.location.href = "/";
     } catch (err) {
       alert(err.toString());
     }
   };
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   const conditionalButtons = (state) => {
     switch (state) {
@@ -219,7 +244,9 @@ export default function Activity() {
               execute(
                 modalState.proposalId,
                 modalState.description,
-                modalState.image
+                modalState.image,
+                modalState.imageIndex,
+                modalState.action
               );
             }}
           >
@@ -236,7 +263,10 @@ export default function Activity() {
       <>
         <div>
           <ul style={{ height: "700px", overflowY: "scroll" }}>
-            {proposals.length > 0 &&
+            {loading ? (
+              <Loader />
+            ) : (
+              proposals.length > 0 &&
               proposals.map((entry) => (
                 // this is fetching sample data from randomuser.me
                 // replace with our mosaic api/ ipfs etc etc
@@ -271,6 +301,8 @@ export default function Activity() {
                       quorum: entry.quorum,
                       proposalId: entry.proposalId,
                       state: entry.state,
+                      imageIndex: entry.imageIndex,
+                      action: entry.action,
                     });
                     console.log(entry.returnValues);
                     setModal(true);
@@ -316,7 +348,8 @@ export default function Activity() {
                     />
                   </div>
                 </div>
-              ))}
+              ))
+            )}
           </ul>
         </div>
 
@@ -333,7 +366,7 @@ export default function Activity() {
               <h6>
                 Proposal #{modalState.number} by 0x{modalState.address}
               </h6>
-              <h5 style={{ fontWeight: 600 }}>Add Image</h5>
+              <h5 style={{ fontWeight: 600 }}>{modalState.action} Image</h5>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -363,7 +396,10 @@ export default function Activity() {
             </div>
 
             <div style={{ marginTop: 40 }}>
-              <h5 style={{ fontWeight: 800 }}>Should this image be added?</h5>
+              <h5 style={{ fontWeight: 800 }}>
+                Should this image be{" "}
+                {modalState.action == "Add" ? "added" : "removed"}?
+              </h5>
               <Chart>
                 <ChartSeries>
                   <ChartSeriesItem
@@ -399,7 +435,8 @@ export default function Activity() {
                 Votes against: {modalState.numAgainst}
               </h6>
               <h6 style={{ fontWeight: 600, color: "#282828" }}>
-                {modalState.quorum > modalState.numFor + modalState.numAgainst
+                {modalState.quorum - modalState.numFor - modalState.numAgainst >
+                0
                   ? "Votes until quorum: " +
                     (
                       modalState.quorum -

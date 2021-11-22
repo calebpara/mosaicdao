@@ -11,7 +11,16 @@ export default function Mosaic() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="container">
+    <div
+      className="container"
+      style={{
+        borderStyle: "solid",
+        borderWidth: 2,
+        borderColor: "black",
+        height: "100%",
+        margin: 2,
+      }}
+    >
       {/* {loading &&
             user.map((user)=> (
                 // this is fetching sample data from randomuser.me
@@ -34,9 +43,6 @@ export default function Mosaic() {
           objectFit: "contain",
           height: "100%",
           width: "100%",
-          borderStyle: "solid",
-          borderWidth: 2,
-          borderColor: "black",
         }}
       />
     </div>

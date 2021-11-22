@@ -28,12 +28,11 @@ function Home() {
     number: null,
   });
 
-  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(-1);
 
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
   const [imageLabel, setImageLabel] = useState("");
-  const [removeIndex, setRemoveIndex] = useState(-1);
   const [description, setDescription] = useState("");
   const [gallery, setGallery] = useState({ width: 0, images: [] });
 
@@ -42,7 +41,8 @@ function Home() {
   const [minProposalERC20Balance, setMinProposalERC20Balance] = useState(0.0);
 
   useEffect(() => {
-    if (contracts["MosaicDAO"]) populateGallery();
+    if (contracts["MosaicDAO"] && contracts["MosaicDAO"].address)
+      populateGallery();
   }, [contracts]);
 
   const [loading, setLoading] = useState(false);
@@ -125,7 +125,7 @@ function Home() {
     <>
       <Form.Group controlId="exampleForm.formFile" style={{ marginTop: 16 }}>
         <Form.Label>Choose an image (must be 256x256 pixels)</Form.Label>
-        <Form.Control type="file" />
+        <Form.Control type="file" onChange={uploadFile} />
       </Form.Group>
     </>
   );
@@ -136,17 +136,27 @@ function Home() {
   }, [contracts]);
 
   const refreshPage = async () => {
-    if (contracts["MosaicERC20"])
+    if (contracts["MosaicERC20"] && contracts["MosaicERC20"].address) {
+      console.log(
+        (await contracts["MosaicERC20"].methods.balanceOf(account).call()) /
+          Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
+      );
       setUserERC20Balance(
         (await contracts["MosaicERC20"].methods.balanceOf(account).call()) /
           Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
       );
+    }
 
-    if (contracts["MosaicGovernor"])
+    if (contracts["MosaicGovernor"] && contracts["MosaicGovernor"].address) {
+      console.log(
+        (await contracts["MosaicGovernor"].methods.proposalThreshold().call()) /
+          Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
+      );
       setMinProposalERC20Balance(
         (await contracts["MosaicGovernor"].methods.proposalThreshold().call()) /
           Math.pow(10, await contracts["MosaicERC20"].methods.decimals().call())
       );
+    }
   };
 
   const onRequestAirDrop = async () => {
@@ -162,8 +172,10 @@ function Home() {
     try {
       if (showResults == 0) {
         // TODO: Fix web3.storage related issues
-        const storageClient = new Web3({ token: API_KEY });
-        const f = new File([image], "image.png", { type: "image/png" });
+        const fileName = "image.png";
+        const storageClient = new Web3Storage({ token: API_KEY });
+        const f = new File([image], fileName, { type: "image/png" });
+        console.log(image);
         const imgURL =
           "https://ipfs.io/ipfs/" +
           (await storageClient.put([f])) +
@@ -190,12 +202,41 @@ function Home() {
             [transferCalldata],
             description,
             imgURL,
+            0,
             "Add"
           )
           .send();
-        window.location.href = "/";
       } else {
+        if (selectedImage == -1) return;
+        const imgURL = await contracts["MosaicDAO"].methods
+          .getImage(selectedImage)
+          .call();
+        const transferCalldata = web3.eth.abi.encodeFunctionCall(
+          {
+            name: "removeImage",
+            type: "function",
+            inputs: [
+              {
+                type: "uint256",
+                name: "index",
+              },
+            ],
+          },
+          [selectedImage]
+        );
+        const proposal = await contracts["MosaicGovernor"].methods
+          .proposeWithDetails(
+            [contracts["MosaicDAO"].options.address],
+            [0],
+            [transferCalldata],
+            description,
+            imgURL,
+            selectedImage,
+            "Remove"
+          )
+          .send();
       }
+      window.location.href = "/";
     } catch (err) {
       alert(err.toString());
     }
@@ -315,7 +356,7 @@ function Home() {
               onClick={onPropose}
               disabled={userERC20Balance < minProposalERC20Balance}
             >
-              {userERC20Balance < minProposalERC20Balance
+              {userERC20Balance < minProposalERC20Balance - 5
                 ? "Insufficient Tokens (" +
                   minProposalERC20Balance.toString() +
                   ")"
