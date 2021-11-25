@@ -1,6 +1,8 @@
 # MosaicDAO
 
-MosaicDAO is an experimental take on collaborative art curation. Through ownership of governance tokens, user can vote on proposals to modify a gallery, which functions as a modifiable NFT.
+MosaicDAO is an experimental take on collaborative art curation. Through ownership of governance tokens, user can vote on proposals to modify a gallery, which functions as a modifiable NFT. https://www.mosaicdao.xyz/
+
+Web3Jam Entry: https://showcase.ethglobal.com/web3jam/mosaicdao (Protocol Labs Best Decentralized Media Hack 2nd Place).
 
 ## Description 
 
