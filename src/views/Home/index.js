@@ -11,7 +11,7 @@ import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
 import FormCheck from "react-bootstrap/FormCheck";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Web3Storage, File } from "web3.storage/dist/bundle.esm.min.js";
+import { Web3Storage, File } from "web3.storage";
 import axios from "axios";
 
 function Home() {

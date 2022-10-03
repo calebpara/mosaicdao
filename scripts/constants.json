@@ -1,0 +1,8 @@
+{
+  "timeFactor": {
+    "mumbai": 40000,
+    "localhost": 5
+  },
+  "proposalMinimum": "5",
+  "quorumFraction": "3"
+}
